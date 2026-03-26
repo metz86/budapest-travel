@@ -1,45 +1,35 @@
 <script lang="ts">
 	import '../app.css';
-	import { onMount, tick } from 'svelte';
+	import { onMount } from 'svelte';
 	import DarkModeToggle from '$lib/DarkModeToggle.svelte';
 	let { children } = $props();
 
 	const navSections = [
-		{ id: 'oversikt', label: 'Oversikt' },
+		{ id: 'hjem', label: 'Hjem' },
 		{ id: 'dagsplan', label: 'Dagsplan' },
-		{ id: 'restauranter', label: 'Mat' },
 		{ id: 'budsjett', label: 'Budsjett' },
-		{ id: 'sjekkliste', label: 'Sjekkliste' },
-		{ id: 'praktisk', label: 'Praktisk' },
-		{ id: 'nyttig', label: 'Nyttig' },
+		{ id: 'forberedelser', label: 'Forberedelser' },
 	];
 
 	const scrollSections = [
-		{ id: 'oversikt', label: 'Oversikt' },
-		{ id: 'fly', label: 'Flyreise' },
-		{ id: 'hotell', label: 'Hotell' },
-		{ id: 'transport', label: 'Transport' },
-		{ id: 'dagsplan', label: 'Dagsplan' },
+		{ id: 'hjem', label: 'Hjem' },
 		{ id: 'dag-1', label: 'Dag 1 — Fredag' },
 		{ id: 'dag-2', label: 'Dag 2 — Lørdag' },
 		{ id: 'dag-3', label: 'Dag 3 — Søndag' },
 		{ id: 'dag-4', label: 'Dag 4 — Mandag' },
 		{ id: 'restauranter', label: 'Restauranter' },
-		{ id: 'attraksjoner', label: 'Attraksjoner' },
 		{ id: 'budsjett', label: 'Budsjett' },
 		{ id: 'sjekkliste', label: 'Sjekkliste' },
 		{ id: 'praktisk', label: 'Praktisk info' },
-		{ id: 'nyttig', label: 'Nyttig' },
 	];
 
 	let menuOpen = $state(false);
-	let activeId = $state('oversikt');
+	let activeId = $state('hjem');
 	let activeScrollIdx = $state(0);
 
 	function toNavId(id: string): string {
-		if (id.startsWith('dag-')) return 'dagsplan';
-		if (id === 'fly' || id === 'hotell' || id === 'transport') return 'oversikt';
-		if (id === 'attraksjoner') return 'restauranter';
+		if (id.startsWith('dag-') || id === 'restauranter' || id === 'attraksjoner') return 'dagsplan';
+		if (id === 'sjekkliste' || id === 'praktisk' || id === 'parlor') return 'forberedelser';
 		return id;
 	}
 
@@ -62,14 +52,13 @@
 	}
 
 	function updateActiveFromScroll() {
-		const threshold = 120; // pixels from top to consider "active"
+		const threshold = 120;
 		let current = scrollSections[0].id;
 
 		for (const s of scrollSections) {
 			const el = document.getElementById(s.id);
 			if (!el) continue;
 			const rect = el.getBoundingClientRect();
-			// If the top of the section is above the threshold, it's the current one
 			if (rect.top <= threshold) {
 				current = s.id;
 			} else {
@@ -93,7 +82,6 @@
 		}
 
 		window.addEventListener('scroll', onScroll, { passive: true });
-		// Initial check
 		updateActiveFromScroll();
 
 		return () => window.removeEventListener('scroll', onScroll);
@@ -107,7 +95,7 @@
 
 <header>
 	<div class="header-inner">
-		<a href="#oversikt" class="logo" onclick={() => handleNavClick('oversikt')}>Budapest</a>
+		<a href="#hjem" class="logo" onclick={() => handleNavClick('hjem')}>Budapest</a>
 		<span class="dates">10.–13. april</span>
 		<DarkModeToggle />
 		<button class="menu-toggle" onclick={() => menuOpen = !menuOpen} aria-label="Meny">
@@ -132,24 +120,20 @@
 <!-- Section navigator -->
 <div class="section-nav">
 	{#if prevSection}
-		<button class="nav-btn nav-prev" onclick={() => goTo(prevSection.id)} aria-label="Forrige: {prevSection.label}">
-			<svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+		<button class="nav-btn nav-up" onclick={() => goTo(prevSection.id)} aria-label="Forrige: {prevSection.label}">
+			<svg width="20" height="20" viewBox="0 0 16 16" fill="none">
 				<path d="M3 10L8 5L13 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
 			</svg>
 			<span class="nav-label">{prevSection.label}</span>
 		</button>
-	{:else}
-		<div class="nav-spacer"></div>
 	{/if}
 	{#if nextSection}
-		<button class="nav-btn nav-next" onclick={() => goTo(nextSection.id)} aria-label="Neste: {nextSection.label}">
+		<button class="nav-btn nav-down" onclick={() => goTo(nextSection.id)} aria-label="Neste: {nextSection.label}">
 			<span class="nav-label">{nextSection.label}</span>
-			<svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+			<svg width="20" height="20" viewBox="0 0 16 16" fill="none">
 				<path d="M3 6L8 11L13 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
 			</svg>
 		</button>
-	{:else}
-		<div class="nav-spacer"></div>
 	{/if}
 </div>
 
@@ -238,30 +222,31 @@
 		border-top: 1px solid var(--border);
 	}
 
-	/* Section navigator — desktop */
+	/* Section navigator — desktop: anchored next to content */
 	.section-nav {
 		position: fixed;
-		right: 2rem;
+		/* Place just to the right of the 800px content column */
+		left: calc(50% + 420px);
 		top: 50%;
 		transform: translateY(-50%);
 		display: flex;
 		flex-direction: column;
-		gap: 0.5rem;
+		gap: 0.6rem;
 		z-index: 90;
 	}
 
 	.nav-btn {
 		display: flex;
 		align-items: center;
-		gap: 0.5rem;
-		padding: 0.5rem 0.85rem;
+		gap: 0.6rem;
+		padding: 0.6rem 1rem;
 		background: var(--bg-card);
 		border: 1px solid var(--border);
-		border-radius: 10px;
+		border-radius: 12px;
 		box-shadow: var(--shadow-lg);
 		cursor: pointer;
 		color: var(--text-muted);
-		font-size: 0.75rem;
+		font-size: 0.85rem;
 		font-weight: 500;
 		font-family: inherit;
 		transition: all 0.2s;
@@ -285,22 +270,11 @@
 		transition: color 0.2s;
 	}
 
-	.nav-spacer {
-		height: 36px;
-	}
-
-	.nav-prev {
-		flex-direction: row;
-	}
-
-	.nav-next {
-		flex-direction: row;
-	}
-
-	/* Mobile */
+	/* Tablet — buttons still visible but compact */
 	@media (max-width: 1100px) {
 		.section-nav {
 			position: fixed;
+			left: auto;
 			right: auto;
 			left: 50%;
 			top: auto;
@@ -315,10 +289,10 @@
 		}
 
 		.nav-btn {
-			padding: 0.65rem;
+			padding: 0.7rem;
 			border-radius: 50%;
-			width: 40px;
-			height: 40px;
+			width: 44px;
+			height: 44px;
 			justify-content: center;
 			background: var(--nav-btn-bg);
 			backdrop-filter: blur(12px);
@@ -326,12 +300,8 @@
 		}
 
 		.nav-btn svg {
-			width: 18px;
-			height: 18px;
-		}
-
-		.nav-spacer {
-			display: none;
+			width: 20px;
+			height: 20px;
 		}
 	}
 
