@@ -1,6 +1,43 @@
+<script lang="ts">
+	import NowIndicator from '$lib/NowIndicator.svelte';
+	import CopyButton from '$lib/CopyButton.svelte';
+	import CurrencyConverter from '$lib/CurrencyConverter.svelte';
+	import Phrasebook from '$lib/Phrasebook.svelte';
+	import Checklist from '$lib/Checklist.svelte';
+	import PracticalInfo from '$lib/PracticalInfo.svelte';
+	import Weather from '$lib/Weather.svelte';
+
+	async function share() {
+		const data = {
+			title: 'Budapest 10.–13. april 2026',
+			text: 'Reiseplan for Budapest-tur!',
+			url: window.location.href,
+		};
+		if (navigator.share) {
+			await navigator.share(data);
+		} else {
+			await navigator.clipboard.writeText(window.location.href);
+			alert('Link kopiert!');
+		}
+	}
+</script>
+
 <section id="oversikt" class="hero">
 	<h1>Budapest</h1>
-	<p class="subtitle">10.–13. april 2025 &middot; 3 netter</p>
+	<p class="subtitle">10.–13. april 2026 &middot; 3 netter</p>
+	<div class="now-row">
+		<NowIndicator />
+	</div>
+	<div class="hero-actions">
+		<button class="hero-btn" onclick={share}>
+			<svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M4 8V13C4 13.55 4.45 14 5 14H11C11.55 14 12 13.55 12 13V8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 2V10M8 2L5.5 4.5M8 2L10.5 4.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+			Del reiseplan
+		</button>
+		<a class="hero-btn" href="https://www.yr.no/nb/v%C3%A6rvarsel/daglig-tabell/2-3054643/Ungarn/Budapest/Budapest" target="_blank" rel="noopener">
+			<svg width="15" height="15" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="6" r="3" stroke="currentColor" stroke-width="1.3"/><path d="M8 9C8 9 3 12 3 13.5C3 14.33 5.24 15 8 15C10.76 15 13 14.33 13 13.5C13 12 8 9 8 9Z" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+			Vær i Budapest
+		</a>
+	</div>
 	<div class="quick-facts">
 		<div class="fact">
 			<span class="fact-icon">&#9992;</span>
@@ -15,6 +52,11 @@
 			<span>Termalbad, Ruin Bars, Fine Dining</span>
 		</div>
 	</div>
+</section>
+
+<!-- VÆR -->
+<section id="vaer">
+	<Weather />
 </section>
 
 <!-- FLYREISE -->
@@ -59,7 +101,10 @@
 	<h2>Overnatting</h2>
 	<div class="card">
 		<div class="card-title">D8 Hotel</div>
-		<p class="card-address">Dorottya u. 8, 1051 Budapest</p>
+		<p class="card-address">
+			Dorottya u. 8, 1051 Budapest
+			<CopyButton text="Dorottya u. 8, 1051 Budapest" label="Kopier" />
+		</p>
 		<div class="detail-grid">
 			<div><strong>Innsjekk:</strong> 14:00</div>
 			<div><strong>Utsjekk:</strong> 11:00</div>
@@ -103,7 +148,7 @@
 	<h2>Dagsplan</h2>
 
 	<!-- DAG 1 -->
-	<div class="day">
+	<div id="dag-1" class="day">
 		<div class="day-header">
 			<span class="day-number">Dag 1</span>
 			<span class="day-date">Fredag 10. april</span>
@@ -115,17 +160,39 @@
 				<div class="tl-time">12:05</div>
 				<div class="tl-content">
 					<strong>Ankomst Budapest</strong>
-					<p>100E buss til Deák Ferenc tér, deretter gange/taxi til hotellet.</p>
+					<p>Landet! Hent bagasje og finn 100E buss.</p>
+				</div>
+			</div>
+			<div class="tl-item">
+				<div class="tl-time">12:30</div>
+				<div class="tl-content">
+					<strong>100E buss til sentrum</strong>
+					<p>Kjøp billett i automat. Ca. 35–40 min til Deák Ferenc tér.</p>
+				</div>
+			</div>
+			<div class="tl-item">
+				<div class="tl-time">13:15</div>
+				<div class="tl-content">
+					<strong>Gange til D8 Hotel</strong>
+					<p>Ca. 5 min fra Deák Ferenc tér. Lever bagasje / tidlig innsjekk.</p>
 				</div>
 			</div>
 			<div class="tl-item">
 				<div class="tl-time">14:00</div>
 				<div class="tl-content">
 					<strong>Innsjekk D8 Hotel</strong>
+					<p>Frisk opp, bytt klær, klar for byen!</p>
 				</div>
 			</div>
 			<div class="tl-item">
-				<div class="tl-time">Ettermiddag</div>
+				<div class="tl-time">14:30</div>
+				<div class="tl-content">
+					<strong>Lunsj / snack i sentrum</strong>
+					<p>Grip noe lett å spise — dere har en stor middag senere.</p>
+				</div>
+			</div>
+			<div class="tl-item">
+				<div class="tl-time">15:30</div>
 				<div class="tl-content">
 					<strong>Shopping & rusletur</strong>
 					<ul>
@@ -137,19 +204,33 @@
 				</div>
 			</div>
 			<div class="tl-item">
-				<div class="tl-time">Kveld</div>
+				<div class="tl-time">18:00</div>
+				<div class="tl-content">
+					<strong>Drink: High Note SkyBar</strong>
+					<p>Rooftop-bar med panoramautsikt over Budapest. Perfekt start på kvelden!</p>
+					<div class="tl-links">
+						<a href="https://highnoteskybar.hu/" target="_blank" rel="noopener">highnoteskybar.hu &#8599;</a>
+						<a href="https://maps.google.com/?q=High+Note+SkyBar+Budapest" target="_blank" rel="noopener">Vis på kart &#8599;</a>
+					</div>
+				</div>
+			</div>
+			<div class="tl-item">
+				<div class="tl-time">20:00</div>
 				<div class="tl-content">
 					<strong>Middag: VIBE Budapest</strong>
 					<p>Moderne fine dining / tasting menu. Ca. 6 min gange fra hotellet.</p>
 					<p class="cost">~46 000 HUF / ~1 550 NOK per pers. (inkl. service)</p>
-					<a href="https://vibebudapest.com/en" target="_blank" rel="noopener">vibebudapest.com &#8599;</a>
+					<div class="tl-links">
+						<a href="https://vibebudapest.com/en" target="_blank" rel="noopener">vibebudapest.com &#8599;</a>
+						<a href="https://maps.google.com/?q=VIBE+Budapest+restaurant" target="_blank" rel="noopener">Vis på kart &#8599;</a>
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 
 	<!-- DAG 2 -->
-	<div class="day">
+	<div id="dag-2" class="day">
 		<div class="day-header">
 			<span class="day-number">Dag 2</span>
 			<span class="day-date">Lørdag 11. april</span>
@@ -158,32 +239,52 @@
 
 		<div class="timeline">
 			<div class="tl-item">
-				<div class="tl-time">Tidlig</div>
+				<div class="tl-time">07:30</div>
+				<div class="tl-content">
+					<strong>Frokost på hotellet</strong>
+				</div>
+			</div>
+			<div class="tl-item">
+				<div class="tl-time">08:15</div>
 				<div class="tl-content">
 					<strong>Fisherman's Bastion</strong>
-					<p>Best lys og minst folk tidlig på morgenen.</p>
+					<p>Best lys og minst folk tidlig. Ta trikk/buss over til Buda-siden.</p>
 					<a href="https://maps.google.com/?q=Fisherman's+Bastion+Budapest" target="_blank" rel="noopener">Vis på kart &#8599;</a>
 				</div>
 			</div>
 			<div class="tl-item">
-				<div class="tl-time">Formiddag</div>
+				<div class="tl-time">09:30</div>
+				<div class="tl-content">
+					<strong>Tilbake til Pest-siden</strong>
+					<p>Trikk/buss tilbake over Donau.</p>
+				</div>
+			</div>
+			<div class="tl-item">
+				<div class="tl-time">10:00</div>
 				<div class="tl-content">
 					<strong>Arán Bakery Budapest</strong>
-					<p>Kaffe og noe søtt.</p>
+					<p>Kaffe og noe søtt. Perfekt pause før resten av dagen.</p>
 					<a href="https://maps.google.com/?q=Arán+Bakery+Budapest" target="_blank" rel="noopener">Vis på kart &#8599;</a>
 				</div>
 			</div>
 			<div class="tl-item">
-				<div class="tl-time"></div>
+				<div class="tl-time">11:00</div>
 				<div class="tl-content">
 					<strong>Neverland Bar & Escape Room</strong>
-					<p>Escape room-opplevelse i ruin bar-området.</p>
+					<p>Escape room-opplevelse i ruin bar-området. Ca. 60–90 min.</p>
 					<p class="cost">~11 000 HUF / ~370 NOK per pers.</p>
 					<a href="https://maps.google.com/?q=Neverland+Escape+Room+Budapest" target="_blank" rel="noopener">Vis på kart &#8599;</a>
 				</div>
 			</div>
 			<div class="tl-item">
-				<div class="tl-time"></div>
+				<div class="tl-time">12:30</div>
+				<div class="tl-content">
+					<strong>Lunsj i området</strong>
+					<p>Mange muligheter rundt Gozsdu Udvar og det jødiske kvarteret.</p>
+				</div>
+			</div>
+			<div class="tl-item">
+				<div class="tl-time">13:30</div>
 				<div class="tl-content">
 					<strong>Gozsdu Udvar</strong>
 					<p>Spaser gjennom passasjen — restauranter, barer og butikker.</p>
@@ -191,7 +292,7 @@
 				</div>
 			</div>
 			<div class="tl-item">
-				<div class="tl-time"></div>
+				<div class="tl-time">14:15</div>
 				<div class="tl-content">
 					<strong>Den store synagogen</strong>
 					<p>Europas største synagoge + Livets tre-minnemonument (utvendig).</p>
@@ -199,15 +300,29 @@
 				</div>
 			</div>
 			<div class="tl-item">
-				<div class="tl-time">16–17</div>
+				<div class="tl-time">15:00</div>
+				<div class="tl-content">
+					<strong>Utforsk kvarteret</strong>
+					<p>Rolig tempo — street art, kafeer, butikker i det jødiske kvarteret.</p>
+				</div>
+			</div>
+			<div class="tl-item">
+				<div class="tl-time">16:30</div>
 				<div class="tl-content">
 					<strong>Szimpla Kert</strong>
-					<p>Budapests mest kjente ruin bar.</p>
+					<p>Budapests mest kjente ruin bar. Verd et besøk mens det fortsatt er dagslys!</p>
 					<a href="https://maps.google.com/?q=Szimpla+Kert+Budapest" target="_blank" rel="noopener">Vis på kart &#8599;</a>
 				</div>
 			</div>
 			<div class="tl-item">
-				<div class="tl-time">Kveld</div>
+				<div class="tl-time">18:00</div>
+				<div class="tl-content">
+					<strong>Tilbake til hotellet</strong>
+					<p>Hvil og frisk opp før middagen.</p>
+				</div>
+			</div>
+			<div class="tl-item">
+				<div class="tl-time">20:00</div>
 				<div class="tl-content">
 					<strong>Middag: Mazel Tov</strong>
 					<p>Moderne middelhavs-mat i vakre omgivelser. Booking anbefales!</p>
@@ -216,7 +331,7 @@
 				</div>
 			</div>
 			<div class="tl-item">
-				<div class="tl-time"></div>
+				<div class="tl-time">22:00</div>
 				<div class="tl-content">
 					<strong>360 Bar</strong>
 					<p>Rooftop-drink med utsikt over byen.</p>
@@ -224,7 +339,7 @@
 				</div>
 			</div>
 			<div class="tl-item">
-				<div class="tl-time">Sent</div>
+				<div class="tl-time">23:30</div>
 				<div class="tl-content">
 					<strong>Spasertur tilbake</strong>
 					<p>Via Operaen og St. Stephen's Basilica (opplyst). Ca. 15–20 min.</p>
@@ -234,7 +349,7 @@
 	</div>
 
 	<!-- DAG 3 -->
-	<div class="day">
+	<div id="dag-3" class="day">
 		<div class="day-header">
 			<span class="day-number">Dag 3</span>
 			<span class="day-date">Søndag 12. april</span>
@@ -243,23 +358,45 @@
 
 		<div class="timeline">
 			<div class="tl-item">
-				<div class="tl-time">Formiddag</div>
+				<div class="tl-time">08:00</div>
+				<div class="tl-content">
+					<strong>Frokost på hotellet</strong>
+				</div>
+			</div>
+			<div class="tl-item">
+				<div class="tl-time">09:00</div>
 				<div class="tl-content">
 					<strong>Széchenyi Termalbad</strong>
-					<p>Europas største termalbad. Kom tidlig!</p>
-					<a href="https://www.szechenyibath.hu/" target="_blank" rel="noopener">szechenyibath.hu &#8599;</a>
-					<a href="https://maps.google.com/?q=Széchenyi+thermal+bath+Budapest" target="_blank" rel="noopener">Vis på kart &#8599;</a>
+					<p>Europas største termalbad. Kom tidlig for å unngå køer! Ta metro M1 (gul linje) til Széchenyi fürdő.</p>
+					<div class="tl-links">
+						<a href="https://www.szechenyibath.hu/" target="_blank" rel="noopener">szechenyibath.hu &#8599;</a>
+						<a href="https://maps.google.com/?q=Széchenyi+thermal+bath+Budapest" target="_blank" rel="noopener">Vis på kart &#8599;</a>
+					</div>
 				</div>
 			</div>
 			<div class="tl-item">
-				<div class="tl-time">Ettermiddag</div>
+				<div class="tl-time">12:30</div>
+				<div class="tl-content">
+					<strong>Lunsj ved Városliget</strong>
+					<p>Spis i nærheten av Helteplassen / Byparken før dere drar tilbake.</p>
+				</div>
+			</div>
+			<div class="tl-item">
+				<div class="tl-time">14:00</div>
 				<div class="tl-content">
 					<strong>Rolig tempo</strong>
-					<p>Spasertur, kafé, shopping — nyt byen i rolig tempo.</p>
+					<p>Tilbake til sentrum. Spasertur langs Donau, kafé, shopping — nyt byen i rolig tempo.</p>
 				</div>
 			</div>
 			<div class="tl-item">
-				<div class="tl-time">Kveld</div>
+				<div class="tl-time">16:00</div>
+				<div class="tl-content">
+					<strong>Hvil på hotellet</strong>
+					<p>Slapp av etter spa-dagen. Frisk opp før middag.</p>
+				</div>
+			</div>
+			<div class="tl-item">
+				<div class="tl-time">20:00</div>
 				<div class="tl-content">
 					<strong>Middag: Beerstro14 Steak House</strong>
 					<p>Steakhouse, ca. 13 min gange fra hotellet. Avslappet avslutning etter spa-dag.</p>
@@ -267,11 +404,18 @@
 					<a href="https://maps.google.com/?q=Beerstro14+Budapest" target="_blank" rel="noopener">Vis på kart &#8599;</a>
 				</div>
 			</div>
+			<div class="tl-item">
+				<div class="tl-time">22:00</div>
+				<div class="tl-content">
+					<strong>Siste kveld</strong>
+					<p>Rolig spasertur tilbake langs Donau. Tidlig kveld — flydag i morgen!</p>
+				</div>
+			</div>
 		</div>
 	</div>
 
 	<!-- DAG 4 -->
-	<div class="day">
+	<div id="dag-4" class="day">
 		<div class="day-header">
 			<span class="day-number">Dag 4</span>
 			<span class="day-date">Mandag 13. april</span>
@@ -280,23 +424,44 @@
 
 		<div class="timeline">
 			<div class="tl-item">
+				<div class="tl-time">08:00</div>
+				<div class="tl-content">
+					<strong>Frokost på hotellet</strong>
+					<p>Siste frokost — nyt den!</p>
+				</div>
+			</div>
+			<div class="tl-item">
+				<div class="tl-time">09:00</div>
+				<div class="tl-content">
+					<strong>Siste rusletur / kaffe</strong>
+					<p>Kort tur i nabolaget. Siste sjanse for suvenirer!</p>
+				</div>
+			</div>
+			<div class="tl-item">
+				<div class="tl-time">10:30</div>
+				<div class="tl-content">
+					<strong>Pakk og gjør klar</strong>
+					<p>Dobbeltsjekk rommet.</p>
+				</div>
+			</div>
+			<div class="tl-item">
 				<div class="tl-time">11:00</div>
 				<div class="tl-content">
 					<strong>Utsjekk D8 Hotel</strong>
 				</div>
 			</div>
 			<div class="tl-item">
-				<div class="tl-time"></div>
+				<div class="tl-time">11:10</div>
 				<div class="tl-content">
 					<strong>100E buss til flyplassen</strong>
-					<p>Fra Deák Ferenc tér. Ca. 35–40 min.</p>
+					<p>Gå til Deák Ferenc tér (5 min). Buss ca. 35–40 min. Vær på flyplassen ~11:50.</p>
 				</div>
 			</div>
 			<div class="tl-item">
 				<div class="tl-time">13:00</div>
 				<div class="tl-content">
 					<strong>Fly DY1551 &rarr; Oslo</strong>
-					<p>Ankomst Gardermoen 15:25.</p>
+					<p>Ankomst Gardermoen 15:25. Velkomne hjem!</p>
 				</div>
 			</div>
 		</div>
@@ -308,7 +473,10 @@
 	<h2>Restauranter</h2>
 	<div class="card-stack">
 		<div class="card restaurant">
-			<div class="card-label">Dag 1 &middot; Fredag kveld</div>
+			<div class="card-top-row">
+				<div class="card-label">Dag 1 &middot; Fredag kveld</div>
+				<span class="booking-badge must-book">Må bookes</span>
+			</div>
 			<div class="card-title">VIBE Budapest</div>
 			<p>Moderne fine dining / tasting menu</p>
 			<div class="detail-grid">
@@ -317,29 +485,44 @@
 				<div><strong>Booking:</strong> Obligatorisk</div>
 				<div><strong>Notat:</strong> Minsteforbruk fre/lør</div>
 			</div>
-			<a href="https://vibebudapest.com/en" target="_blank" rel="noopener">Nettside &#8599;</a>
+			<div class="link-row">
+				<a href="https://vibebudapest.com/en" target="_blank" rel="noopener">Nettside &#8599;</a>
+				<a href="https://maps.google.com/?q=VIBE+Budapest+restaurant" target="_blank" rel="noopener">Vis på kart &#8599;</a>
+			</div>
 		</div>
 
 		<div class="card restaurant">
-			<div class="card-label">Dag 2 &middot; Lørdag kveld</div>
+			<div class="card-top-row">
+				<div class="card-label">Dag 2 &middot; Lørdag kveld</div>
+				<span class="booking-badge should-book">Anbefalt booking</span>
+			</div>
 			<div class="card-title">Mazel Tov</div>
 			<p>Moderne middelhavs-mat i ruin bar-stil innergård</p>
 			<div class="detail-grid">
 				<div><strong>Pris:</strong> ~450–560 NOK/pers</div>
 				<div><strong>Booking:</strong> Anbefales</div>
 			</div>
-			<a href="https://maps.google.com/?q=Mazel+Tov+Budapest" target="_blank" rel="noopener">Vis på kart &#8599;</a>
+			<div class="link-row">
+				<a href="https://mazeltov.hu/" target="_blank" rel="noopener">Nettside &#8599;</a>
+				<a href="https://maps.google.com/?q=Mazel+Tov+Budapest" target="_blank" rel="noopener">Vis på kart &#8599;</a>
+			</div>
 		</div>
 
 		<div class="card restaurant">
-			<div class="card-label">Dag 3 &middot; Søndag kveld</div>
+			<div class="card-top-row">
+				<div class="card-label">Dag 3 &middot; Søndag kveld</div>
+				<span class="booking-badge walk-in">Walk-in</span>
+			</div>
 			<div class="card-title">Beerstro14 Steak House</div>
 			<p>Steakhouse — avslappet avslutning etter spa-dag</p>
 			<div class="detail-grid">
 				<div><strong>Pris:</strong> ~850 NOK/pers</div>
 				<div><strong>Avstand:</strong> 13 min gange</div>
 			</div>
-			<a href="https://maps.google.com/?q=Beerstro14+Budapest" target="_blank" rel="noopener">Vis på kart &#8599;</a>
+			<div class="link-row">
+				<a href="https://beerstro14.hu/" target="_blank" rel="noopener">Nettside &#8599;</a>
+				<a href="https://maps.google.com/?q=Beerstro14+Budapest" target="_blank" rel="noopener">Vis på kart &#8599;</a>
+			</div>
 		</div>
 	</div>
 </section>
@@ -443,6 +626,28 @@
 		</table>
 		<p class="card-note">Ekskl. fly og hotell. Valutakurs: ~0,034 NOK/HUF.</p>
 	</div>
+
+	<div class="budget-tools">
+		<CurrencyConverter />
+	</div>
+</section>
+
+<!-- SJEKKLISTE -->
+<section id="sjekkliste">
+	<h2>Sjekkliste</h2>
+	<Checklist />
+</section>
+
+<!-- PRAKTISK -->
+<section id="praktisk">
+	<h2>Praktisk info</h2>
+	<PracticalInfo />
+</section>
+
+<!-- NYTTIG -->
+<section id="nyttig">
+	<h2>Nyttig</h2>
+	<Phrasebook />
 </section>
 
 <style>
@@ -462,6 +667,48 @@
 		color: var(--text-muted);
 		font-size: 1rem;
 		margin-top: 0.25rem;
+	}
+
+	.now-row {
+		margin-top: 0.75rem;
+		display: flex;
+		justify-content: center;
+	}
+
+	.hero-actions {
+		display: flex;
+		justify-content: center;
+		gap: 0.5rem;
+		margin-top: 1rem;
+		flex-wrap: wrap;
+	}
+
+	.hero-btn {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.4rem;
+		padding: 0.45rem 0.85rem;
+		background: var(--bg-card);
+		border: 1px solid var(--border);
+		border-radius: 8px;
+		font-size: 0.8rem;
+		font-weight: 500;
+		font-family: inherit;
+		color: var(--text-muted);
+		cursor: pointer;
+		transition: all 0.15s;
+		text-decoration: none;
+	}
+
+	.hero-btn:hover {
+		background: var(--accent-light);
+		color: var(--accent);
+		border-color: var(--accent);
+		text-decoration: none;
+	}
+
+	.hero-btn svg {
+		flex-shrink: 0;
 	}
 
 	.quick-facts {
@@ -545,6 +792,10 @@
 		color: var(--text-muted);
 		font-size: 0.85rem;
 		margin-bottom: 0.75rem;
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		flex-wrap: wrap;
 	}
 
 	.card-note {
@@ -578,6 +829,53 @@
 		display: flex;
 		gap: 1rem;
 		font-size: 0.85rem;
+	}
+
+	.card-top-row {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 0.5rem;
+	}
+
+	.booking-badge {
+		font-size: 0.65rem;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.03em;
+		padding: 0.2rem 0.5rem;
+		border-radius: 4px;
+		white-space: nowrap;
+	}
+
+	.booking-badge.must-book {
+		background: #fce4ec;
+		color: #c62828;
+	}
+
+	:global([data-theme="dark"]) .booking-badge.must-book {
+		background: #3e1416;
+		color: #ef9a9a;
+	}
+
+	.booking-badge.should-book {
+		background: #fff3e0;
+		color: #e65100;
+	}
+
+	:global([data-theme="dark"]) .booking-badge.should-book {
+		background: #3e2612;
+		color: #ffb74d;
+	}
+
+	.booking-badge.walk-in {
+		background: #e8f5e9;
+		color: #2e7d32;
+	}
+
+	:global([data-theme="dark"]) .booking-badge.walk-in {
+		background: #1b3d1f;
+		color: #81c784;
 	}
 
 	.map-link {
@@ -631,6 +929,7 @@
 		padding: 1.25rem;
 		box-shadow: var(--shadow);
 		margin-bottom: 1rem;
+		scroll-margin-top: 4rem;
 	}
 
 	.day-header {
@@ -734,6 +1033,12 @@
 		font-weight: 500;
 	}
 
+	.tl-links {
+		display: flex;
+		gap: 1rem;
+		margin-top: 0.25rem;
+	}
+
 	/* Attraction cards */
 	.attraction {
 		text-align: center;
@@ -744,9 +1049,13 @@
 		color: var(--text-muted);
 	}
 
-	/* Budget table */
+	/* Budget */
 	.budget-card {
 		overflow-x: auto;
+	}
+
+	.budget-tools {
+		margin-top: 1rem;
 	}
 
 	table {

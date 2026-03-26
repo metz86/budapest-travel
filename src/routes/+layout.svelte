@@ -1,19 +1,103 @@
 <script lang="ts">
 	import '../app.css';
+	import { onMount, tick } from 'svelte';
+	import DarkModeToggle from '$lib/DarkModeToggle.svelte';
 	let { children } = $props();
 
-	const sections = [
+	const navSections = [
 		{ id: 'oversikt', label: 'Oversikt' },
-		{ id: 'fly', label: 'Fly' },
+		{ id: 'dagsplan', label: 'Dagsplan' },
+		{ id: 'restauranter', label: 'Mat' },
+		{ id: 'budsjett', label: 'Budsjett' },
+		{ id: 'sjekkliste', label: 'Sjekkliste' },
+		{ id: 'praktisk', label: 'Praktisk' },
+		{ id: 'nyttig', label: 'Nyttig' },
+	];
+
+	const scrollSections = [
+		{ id: 'oversikt', label: 'Oversikt' },
+		{ id: 'fly', label: 'Flyreise' },
 		{ id: 'hotell', label: 'Hotell' },
 		{ id: 'transport', label: 'Transport' },
 		{ id: 'dagsplan', label: 'Dagsplan' },
-		{ id: 'restauranter', label: 'Mat' },
+		{ id: 'dag-1', label: 'Dag 1 — Fredag' },
+		{ id: 'dag-2', label: 'Dag 2 — Lørdag' },
+		{ id: 'dag-3', label: 'Dag 3 — Søndag' },
+		{ id: 'dag-4', label: 'Dag 4 — Mandag' },
+		{ id: 'restauranter', label: 'Restauranter' },
 		{ id: 'attraksjoner', label: 'Attraksjoner' },
 		{ id: 'budsjett', label: 'Budsjett' },
+		{ id: 'sjekkliste', label: 'Sjekkliste' },
+		{ id: 'praktisk', label: 'Praktisk info' },
+		{ id: 'nyttig', label: 'Nyttig' },
 	];
 
 	let menuOpen = $state(false);
+	let activeId = $state('oversikt');
+	let activeScrollIdx = $state(0);
+
+	function toNavId(id: string): string {
+		if (id.startsWith('dag-')) return 'dagsplan';
+		if (id === 'fly' || id === 'hotell' || id === 'transport') return 'oversikt';
+		if (id === 'attraksjoner') return 'restauranter';
+		return id;
+	}
+
+	$effect(() => {
+		activeScrollIdx = scrollSections.findIndex(s => s.id === activeId);
+		if (activeScrollIdx < 0) activeScrollIdx = 0;
+	});
+
+	let prevSection = $derived(activeScrollIdx > 0 ? scrollSections[activeScrollIdx - 1] : null);
+	let nextSection = $derived(activeScrollIdx < scrollSections.length - 1 ? scrollSections[activeScrollIdx + 1] : null);
+
+	function handleNavClick(id: string) {
+		activeId = id;
+		menuOpen = false;
+	}
+
+	function goTo(id: string) {
+		activeId = id;
+		document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+	}
+
+	function updateActiveFromScroll() {
+		const threshold = 120; // pixels from top to consider "active"
+		let current = scrollSections[0].id;
+
+		for (const s of scrollSections) {
+			const el = document.getElementById(s.id);
+			if (!el) continue;
+			const rect = el.getBoundingClientRect();
+			// If the top of the section is above the threshold, it's the current one
+			if (rect.top <= threshold) {
+				current = s.id;
+			} else {
+				break;
+			}
+		}
+
+		activeId = current;
+	}
+
+	onMount(() => {
+		let ticking = false;
+		function onScroll() {
+			if (!ticking) {
+				requestAnimationFrame(() => {
+					updateActiveFromScroll();
+					ticking = false;
+				});
+				ticking = true;
+			}
+		}
+
+		window.addEventListener('scroll', onScroll, { passive: true });
+		// Initial check
+		updateActiveFromScroll();
+
+		return () => window.removeEventListener('scroll', onScroll);
+	});
 </script>
 
 <svelte:head>
@@ -23,14 +107,19 @@
 
 <header>
 	<div class="header-inner">
-		<a href="#oversikt" class="logo">Budapest</a>
+		<a href="#oversikt" class="logo" onclick={() => handleNavClick('oversikt')}>Budapest</a>
 		<span class="dates">10.–13. april</span>
+		<DarkModeToggle />
 		<button class="menu-toggle" onclick={() => menuOpen = !menuOpen} aria-label="Meny">
 			{#if menuOpen}✕{:else}☰{/if}
 		</button>
 		<nav class:open={menuOpen}>
-			{#each sections as s}
-				<a href="#{s.id}" onclick={() => menuOpen = false}>{s.label}</a>
+			{#each navSections as s}
+				<a
+					href="#{s.id}"
+					class:active={toNavId(activeId) === s.id}
+					onclick={() => handleNavClick(s.id)}
+				>{s.label}</a>
 			{/each}
 		</nav>
 	</div>
@@ -40,8 +129,32 @@
 	{@render children()}
 </main>
 
+<!-- Section navigator -->
+<div class="section-nav">
+	{#if prevSection}
+		<button class="nav-btn nav-prev" onclick={() => goTo(prevSection.id)} aria-label="Forrige: {prevSection.label}">
+			<svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+				<path d="M3 10L8 5L13 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+			</svg>
+			<span class="nav-label">{prevSection.label}</span>
+		</button>
+	{:else}
+		<div class="nav-spacer"></div>
+	{/if}
+	{#if nextSection}
+		<button class="nav-btn nav-next" onclick={() => goTo(nextSection.id)} aria-label="Neste: {nextSection.label}">
+			<span class="nav-label">{nextSection.label}</span>
+			<svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+				<path d="M3 6L8 11L13 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+			</svg>
+		</button>
+	{:else}
+		<div class="nav-spacer"></div>
+	{/if}
+</div>
+
 <footer>
-	<p>Budapest 2025 — God tur!</p>
+	<p>Budapest 2026 — God tur!</p>
 </footer>
 
 <style>
@@ -49,7 +162,7 @@
 		position: sticky;
 		top: 0;
 		z-index: 100;
-		background: rgba(250, 249, 247, 0.92);
+		background: var(--header-bg);
 		backdrop-filter: blur(12px);
 		border-bottom: 1px solid var(--border);
 	}
@@ -106,6 +219,11 @@
 		text-decoration: none;
 	}
 
+	nav a.active {
+		background: var(--accent);
+		color: white;
+	}
+
 	main {
 		max-width: 800px;
 		margin: 0 auto;
@@ -118,6 +236,103 @@
 		font-size: 0.8rem;
 		color: var(--text-muted);
 		border-top: 1px solid var(--border);
+	}
+
+	/* Section navigator — desktop */
+	.section-nav {
+		position: fixed;
+		right: 2rem;
+		top: 50%;
+		transform: translateY(-50%);
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+		z-index: 90;
+	}
+
+	.nav-btn {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		padding: 0.5rem 0.85rem;
+		background: var(--bg-card);
+		border: 1px solid var(--border);
+		border-radius: 10px;
+		box-shadow: var(--shadow-lg);
+		cursor: pointer;
+		color: var(--text-muted);
+		font-size: 0.75rem;
+		font-weight: 500;
+		font-family: inherit;
+		transition: all 0.2s;
+		white-space: nowrap;
+	}
+
+	.nav-btn:hover {
+		background: var(--accent);
+		color: white;
+		border-color: var(--accent);
+		box-shadow: 0 4px 16px rgba(196, 85, 58, 0.25);
+	}
+
+	.nav-btn:hover svg {
+		color: white;
+	}
+
+	.nav-btn svg {
+		flex-shrink: 0;
+		color: var(--accent);
+		transition: color 0.2s;
+	}
+
+	.nav-spacer {
+		height: 36px;
+	}
+
+	.nav-prev {
+		flex-direction: row;
+	}
+
+	.nav-next {
+		flex-direction: row;
+	}
+
+	/* Mobile */
+	@media (max-width: 1100px) {
+		.section-nav {
+			position: fixed;
+			right: auto;
+			left: 50%;
+			top: auto;
+			bottom: 1.25rem;
+			transform: translateX(-50%);
+			flex-direction: row;
+			gap: 0.5rem;
+		}
+
+		.nav-label {
+			display: none;
+		}
+
+		.nav-btn {
+			padding: 0.65rem;
+			border-radius: 50%;
+			width: 40px;
+			height: 40px;
+			justify-content: center;
+			background: var(--nav-btn-bg);
+			backdrop-filter: blur(12px);
+			box-shadow: 0 2px 12px rgba(0, 0, 0, 0.12);
+		}
+
+		.nav-btn svg {
+			width: 18px;
+			height: 18px;
+		}
+
+		.nav-spacer {
+			display: none;
+		}
 	}
 
 	@media (max-width: 700px) {

@@ -1,4 +1,5 @@
-:root {
+:root,
+[data-theme="light"] {
 	--bg: #faf9f7;
 	--bg-card: #ffffff;
 	--text: #1a1a1a;
@@ -9,6 +10,22 @@
 	--shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
 	--shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.08);
 	--radius: 12px;
+	--header-bg: rgba(250, 249, 247, 0.92);
+	--nav-btn-bg: rgba(255, 255, 255, 0.92);
+}
+
+[data-theme="dark"] {
+	--bg: #0f0f0f;
+	--bg-card: #1a1a1a;
+	--text: #e8e6e3;
+	--text-muted: #8a8a8a;
+	--accent: #e07a5f;
+	--accent-light: #2a1d17;
+	--border: #2a2a2a;
+	--shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+	--shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.35);
+	--header-bg: rgba(15, 15, 15, 0.92);
+	--nav-btn-bg: rgba(26, 26, 26, 0.92);
 }
 
 * {
@@ -27,6 +44,7 @@ body {
 	color: var(--text);
 	line-height: 1.6;
 	-webkit-font-smoothing: antialiased;
+	transition: background 0.2s, color 0.2s;
 }
 
 a {
