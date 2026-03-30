@@ -39,7 +39,7 @@
 			title: 'Klær — pakk lett!', key: 'clothes',
 			items: [
 				{ id: 'vibe-outfit', text: 'Pent antrekk til VIBE (fre) — skjorte/bluse, pen bukse, pene sko', checked: false },
-				{ id: 'casual-dinner', text: 'Casual kveldstøy til Mazel Tov (lør) + Beerstro14 (søn)', checked: false },
+				{ id: 'casual-dinner', text: 'Casual kveldstøy til Beerstro14 (lør) + Mazel Tov (søn)', checked: false },
 				{ id: 'daywear-1', text: 'Dagstøy dag 1–2 — t-skjorte/topp, jeans/chinos', checked: false },
 				{ id: 'daywear-2', text: 'Dagstøy dag 3–4 — t-skjorte/topp, shorts/bukse', checked: false },
 				{ id: 'light-jacket', text: 'Lett jakke (april kan være kjølig om kvelden)', checked: false },

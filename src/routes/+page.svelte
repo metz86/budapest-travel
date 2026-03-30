@@ -216,9 +216,8 @@
 			<div class="tl-item" class:done={doneItems['d2-explore']}><button class="tl-dot" onclick={() => toggleDone('d2-explore')}></button><div class="tl-time">15:00</div><div class="tl-content"><strong>Utforsk kvarteret</strong><p>Rolig tempo — street art, kafeer, butikker i det jødiske kvarteret.</p></div></div>
 			<div class="tl-item" class:done={doneItems['d2-szimpla']}><button class="tl-dot" onclick={() => toggleDone('d2-szimpla')}></button><div class="tl-time">16:30</div><div class="tl-content"><strong>Szimpla Kert</strong><p>Budapests mest kjente ruin bar. Verd et besøk mens det fortsatt er dagslys!</p><a href="https://maps.google.com/?q=Szimpla+Kert+Budapest" target="_blank" rel="noopener">Vis på kart &#8599;</a></div></div>
 			<div class="tl-item" class:done={doneItems['d2-rest']}><button class="tl-dot" onclick={() => toggleDone('d2-rest')}></button><div class="tl-time">18:00</div><div class="tl-content"><strong>Tilbake til hotellet</strong><p>Hvil og frisk opp før middagen.</p></div></div>
-			<div class="tl-item" class:done={doneItems['d2-mazel']}><button class="tl-dot" onclick={() => toggleDone('d2-mazel')}></button><div class="tl-time">20:00</div><div class="tl-content"><strong>Middag: Mazel Tov</strong><p>Moderne middelhavs-mat i vakre omgivelser. Booking anbefales!</p><p class="cost">~40–50 EUR / ~450–560 NOK per pers.</p><a href="https://maps.google.com/?q=Mazel+Tov+Budapest" target="_blank" rel="noopener">Vis på kart &#8599;</a></div></div>
-			<div class="tl-item" class:done={doneItems['d2-360']}><button class="tl-dot" onclick={() => toggleDone('d2-360')}></button><div class="tl-time">22:00</div><div class="tl-content"><strong>360 Bar</strong><p>Rooftop-drink med utsikt over byen.</p><a href="https://maps.google.com/?q=360+Bar+Budapest" target="_blank" rel="noopener">Vis på kart &#8599;</a></div></div>
-			<div class="tl-item" class:done={doneItems['d2-walk']}><button class="tl-dot" onclick={() => toggleDone('d2-walk')}></button><div class="tl-time">23:30</div><div class="tl-content"><strong>Spasertur tilbake</strong><p>Via Operaen og St. Stephen's Basilica (opplyst). Ca. 15–20 min.</p></div></div>
+			<div class="tl-item" class:done={doneItems['d2-beerstro']}><button class="tl-dot" onclick={() => toggleDone('d2-beerstro')}></button><div class="tl-time">20:00</div><div class="tl-content"><strong>Middag: Beerstro14 Steak House</strong><p>Steakhouse, ca. 13 min gange fra hotellet. Reservation #WHHDS35AEJU.</p><p class="cost">~25 000 HUF / ~850 NOK per pers.</p><a href="https://maps.google.com/?q=Beerstro14+Budapest" target="_blank" rel="noopener">Vis på kart &#8599;</a></div></div>
+			<div class="tl-item" class:done={doneItems['d2-donau']}><button class="tl-dot" onclick={() => toggleDone('d2-donau')}></button><div class="tl-time">22:00</div><div class="tl-content"><strong>Spasertur langs Donau</strong><p>Rolig kveldstur langs elven tilbake til hotellet.</p></div></div>
 		</div>
 	</div>
 
@@ -235,8 +234,9 @@
 			<div class="tl-item" class:done={doneItems['d3-lunch']}><button class="tl-dot" onclick={() => toggleDone('d3-lunch')}></button><div class="tl-time">12:30</div><div class="tl-content"><strong>Lunsj ved Városliget</strong><p>Spis i nærheten av Helteplassen / Byparken før dere drar tilbake.</p></div></div>
 			<div class="tl-item" class:done={doneItems['d3-relax']}><button class="tl-dot" onclick={() => toggleDone('d3-relax')}></button><div class="tl-time">14:00</div><div class="tl-content"><strong>Rolig tempo</strong><p>Tilbake til sentrum. Spasertur langs Donau, kafé, shopping — nyt byen i rolig tempo.</p></div></div>
 			<div class="tl-item" class:done={doneItems['d3-rest']}><button class="tl-dot" onclick={() => toggleDone('d3-rest')}></button><div class="tl-time">16:00</div><div class="tl-content"><strong>Hvil på hotellet</strong><p>Slapp av etter spa-dagen. Frisk opp før middag.</p></div></div>
-			<div class="tl-item" class:done={doneItems['d3-beerstro']}><button class="tl-dot" onclick={() => toggleDone('d3-beerstro')}></button><div class="tl-time">20:00</div><div class="tl-content"><strong>Middag: Beerstro14 Steak House</strong><p>Steakhouse, ca. 13 min gange fra hotellet. Avslappet avslutning etter spa-dag.</p><p class="cost">~25 000 HUF / ~850 NOK per pers.</p><a href="https://maps.google.com/?q=Beerstro14+Budapest" target="_blank" rel="noopener">Vis på kart &#8599;</a></div></div>
-			<div class="tl-item" class:done={doneItems['d3-evening']}><button class="tl-dot" onclick={() => toggleDone('d3-evening')}></button><div class="tl-time">22:00</div><div class="tl-content"><strong>Siste kveld</strong><p>Rolig spasertur tilbake langs Donau. Tidlig kveld — flydag i morgen!</p></div></div>
+			<div class="tl-item" class:done={doneItems['d3-mazel']}><button class="tl-dot" onclick={() => toggleDone('d3-mazel')}></button><div class="tl-time">19:00</div><div class="tl-content"><strong>Middag: Mazel Tov</strong><p>Moderne middelhavs-mat i vakre omgivelser. Reservation #3GG57U3TVNHR.</p><p class="cost">~40–50 EUR / ~450–560 NOK per pers.</p><a href="https://maps.google.com/?q=Mazel+Tov+Budapest" target="_blank" rel="noopener">Vis på kart &#8599;</a></div></div>
+			<div class="tl-item" class:done={doneItems['d3-walk']}><button class="tl-dot" onclick={() => toggleDone('d3-walk')}></button><div class="tl-time">21:30</div><div class="tl-content"><strong>Spasertur tilbake</strong><p>Via Operaen og St. Stephen's Basilica (opplyst). Ca. 15–20 min.</p></div></div>
+			<div class="tl-item" class:done={doneItems['d3-evening']}><button class="tl-dot" onclick={() => toggleDone('d3-evening')}></button><div class="tl-time">22:00</div><div class="tl-content"><strong>Siste kveld</strong><p>Tidlig kveld — flydag i morgen!</p></div></div>
 		</div>
 	</div>
 
@@ -282,33 +282,35 @@
 			<div class="card restaurant">
 				<div class="card-top-row">
 					<div class="card-label">Dag 2 &middot; Lørdag kveld</div>
-					<BookingBadge id="mazel-tov" defaultText="Anbefalt booking" defaultColor="warning" />
+					<BookingBadge id="beerstro14" defaultText="Booket" defaultColor="success" />
 				</div>
-				<div class="card-title">Mazel Tov</div>
-				<p>Moderne middelhavs-mat i ruin bar-stil innergård</p>
+				<div class="card-title">Beerstro14 Steak House</div>
+				<p>Steakhouse — god avslutning etter en lang dag i kvarteret</p>
 				<div class="detail-grid">
-					<div><strong>Pris:</strong> ~450–560 NOK/pers</div>
-					<div><strong>Booking:</strong> Anbefales</div>
+					<div><strong>Pris:</strong> ~850 NOK/pers</div>
+					<div><strong>Booking:</strong> #WHHDS35AEJU</div>
+					<div><strong>Avstand:</strong> 13 min gange</div>
+					<div><strong>Seksjon:</strong> Indoor</div>
 				</div>
 				<div class="link-row">
-					<a href="https://mazeltov.hu/" target="_blank" rel="noopener">Nettside &#8599;</a>
-					<a href="https://maps.google.com/?q=Mazel+Tov+Budapest" target="_blank" rel="noopener">Vis på kart &#8599;</a>
+					<a href="https://beerstro14.hu/" target="_blank" rel="noopener">Nettside &#8599;</a>
+					<a href="https://maps.google.com/?q=Beerstro14+Budapest" target="_blank" rel="noopener">Vis på kart &#8599;</a>
 				</div>
 			</div>
 			<div class="card restaurant">
 				<div class="card-top-row">
 					<div class="card-label">Dag 3 &middot; Søndag kveld</div>
-					<BookingBadge id="beerstro14" defaultText="Walk-in" defaultColor="success" />
+					<BookingBadge id="mazel-tov" defaultText="Booket" defaultColor="success" />
 				</div>
-				<div class="card-title">Beerstro14 Steak House</div>
-				<p>Steakhouse — avslappet avslutning etter spa-dag</p>
+				<div class="card-title">Mazel Tov</div>
+				<p>Moderne middelhavs-mat i ruin bar-stil innergård</p>
 				<div class="detail-grid">
-					<div><strong>Pris:</strong> ~850 NOK/pers</div>
-					<div><strong>Avstand:</strong> 13 min gange</div>
+					<div><strong>Pris:</strong> ~450–560 NOK/pers</div>
+					<div><strong>Booking:</strong> #3GG57U3TVNHR</div>
 				</div>
 				<div class="link-row">
-					<a href="https://beerstro14.hu/" target="_blank" rel="noopener">Nettside &#8599;</a>
-					<a href="https://maps.google.com/?q=Beerstro14+Budapest" target="_blank" rel="noopener">Vis på kart &#8599;</a>
+					<a href="https://mazeltov.hu/" target="_blank" rel="noopener">Nettside &#8599;</a>
+					<a href="https://maps.google.com/?q=Mazel+Tov+Budapest" target="_blank" rel="noopener">Vis på kart &#8599;</a>
 				</div>
 			</div>
 		</div>
@@ -323,7 +325,7 @@
 			<div class="card attraction"><div class="card-emoji">&#11044;</div><div class="card-title">Den store synagogen</div><p>Lørdag formiddag</p><p class="card-note">Europas største + Livets tre-minnemonument.</p></div>
 			<div class="card attraction"><div class="card-emoji">&#127866;</div><div class="card-title">Ruin Bars</div><p>Lørdag ettermiddag/kveld</p><p class="card-note">Szimpla Kert, Gozsdu Udvar, 360 Bar (rooftop).</p></div>
 			<div class="card attraction"><div class="card-emoji">&#128274;</div><div class="card-title">Neverland Escape Room</div><p>Lørdag formiddag</p><p class="card-note">~370 NOK per person.</p></div>
-			<div class="card attraction"><div class="card-emoji">&#127979;</div><div class="card-title">Operaen & St. Stephen's Basilica</div><p>Lørdag kveld (spasertur)</p><p class="card-note">Vakkert opplyst om kvelden.</p></div>
+			<div class="card attraction"><div class="card-emoji">&#127979;</div><div class="card-title">Operaen & St. Stephen's Basilica</div><p>Søndag kveld (spasertur)</p><p class="card-note">Vakkert opplyst om kvelden.</p></div>
 		</div>
 	</div>
 </section>
@@ -339,8 +341,8 @@
 			<thead><tr><th>Post</th><th>NOK</th></tr></thead>
 			<tbody>
 				<tr><td>VIBE Budapest (dag 1)</td><td>1 550</td></tr>
-				<tr><td>Mazel Tov (dag 2)</td><td>~500</td></tr>
-				<tr><td>Beerstro14 (dag 3)</td><td>850</td></tr>
+				<tr><td>Beerstro14 (dag 2)</td><td>850</td></tr>
+				<tr><td>Mazel Tov (dag 3)</td><td>~500</td></tr>
 				<tr><td>Escape Room</td><td>370</td></tr>
 				<tr><td>Széchenyi — Private Spa Retreat</td><td>1 190</td></tr><tr><td class="table-alt">↳ alt: Private Spa Experience (m/ massasje)</td><td class="table-alt">1 600</td></tr>
 				<tr><td>100E buss (tur/retur)</td><td>170</td></tr>
