@@ -57,6 +57,8 @@
 		},
 	];
 
+	let { onhide = () => {} }: { onhide?: () => void } = $props();
+
 	let groups = $state<CheckGroup[]>(structuredClone(defaultGroups));
 	let loaded = $state(false);
 	let editing = $state(false);
@@ -161,6 +163,7 @@
 	function hideChecklist() {
 		hidden = true;
 		localStorage.setItem(HIDDEN_KEY, 'true');
+		onhide();
 	}
 
 	export function restore() {

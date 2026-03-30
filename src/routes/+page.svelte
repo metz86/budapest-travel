@@ -357,7 +357,7 @@
 
 	<div id="sjekkliste" class="subsection">
 		<h3>Sjekkliste</h3>
-		<Checklist bind:this={checklistRef} />
+		<Checklist bind:this={checklistRef} onhide={() => checklistHidden = true} />
 	</div>
 
 	<div id="praktisk" class="subsection">
