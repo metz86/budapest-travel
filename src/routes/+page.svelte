@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import NowIndicator from '$lib/NowIndicator.svelte';
 	import CopyButton from '$lib/CopyButton.svelte';
 	import CurrencyConverter from '$lib/CurrencyConverter.svelte';
@@ -6,6 +7,30 @@
 	import Checklist from '$lib/Checklist.svelte';
 	import PracticalInfo from '$lib/PracticalInfo.svelte';
 	import Weather from '$lib/Weather.svelte';
+	import BookingBadge from '$lib/BookingBadge.svelte';
+
+	// Itinerary done state
+	const DONE_KEY = 'budapest-itinerary-done';
+	let doneItems = $state<Record<string, boolean>>({});
+
+	let checklistRef: Checklist;
+	let checklistHidden = $state(false);
+
+	onMount(() => {
+		const saved = localStorage.getItem(DONE_KEY);
+		if (saved) { try { doneItems = JSON.parse(saved); } catch {} }
+		checklistHidden = localStorage.getItem('budapest-checklist-hidden') === 'true';
+	});
+
+	function toggleDone(id: string) {
+		doneItems[id] = !doneItems[id];
+		localStorage.setItem(DONE_KEY, JSON.stringify(doneItems));
+	}
+
+	function restoreChecklist() {
+		checklistRef?.restore();
+		checklistHidden = false;
+	}
 
 	async function share() {
 		const data = {
@@ -154,14 +179,14 @@
 			<span class="day-theme">Ankomst & Sentrum</span>
 		</div>
 		<div class="timeline">
-			<div class="tl-item"><div class="tl-time">12:05</div><div class="tl-content"><strong>Ankomst Budapest</strong><p>Landet! Hent bagasje og finn 100E buss.</p></div></div>
-			<div class="tl-item"><div class="tl-time">12:30</div><div class="tl-content"><strong>100E buss til sentrum</strong><p>Kjøp billett i automat. Ca. 35–40 min til Deák Ferenc tér.</p></div></div>
-			<div class="tl-item"><div class="tl-time">13:15</div><div class="tl-content"><strong>Gange til D8 Hotel</strong><p>Ca. 5 min fra Deák Ferenc tér. Lever bagasje / tidlig innsjekk.</p></div></div>
-			<div class="tl-item"><div class="tl-time">14:00</div><div class="tl-content"><strong>Innsjekk D8 Hotel</strong><p>Frisk opp, bytt klær, klar for byen!</p></div></div>
-			<div class="tl-item"><div class="tl-time">14:30</div><div class="tl-content"><strong>Lunsj / snack i sentrum</strong><p>Grip noe lett å spise — dere har en stor middag senere.</p></div></div>
-			<div class="tl-item"><div class="tl-time">15:30</div><div class="tl-content"><strong>Shopping & rusletur</strong><ul><li><a href="https://maps.google.com/?q=Váci+utca+Budapest" target="_blank" rel="noopener">Váci utca</a> — hovedhandlegate</li><li><a href="https://maps.google.com/?q=Deák+Ferenc+utca+Budapest" target="_blank" rel="noopener">Deák Ferenc utca</a> — butikker og byliv</li><li><a href="https://maps.google.com/?q=Paloma+Budapest" target="_blank" rel="noopener">Paloma Artspace</a> — design, kunst, lokale produkter</li><li><a href="https://maps.google.com/?q=Párisi+Udvar+Budapest" target="_blank" rel="noopener">Párisi Udvar</a> — historisk shoppingarkade</li></ul></div></div>
-			<div class="tl-item"><div class="tl-time">18:00</div><div class="tl-content"><strong>Drink: High Note SkyBar</strong><p>Rooftop-bar med panoramautsikt over Budapest. Perfekt start på kvelden!</p><div class="tl-links"><a href="https://highnoteskybar.hu/" target="_blank" rel="noopener">highnoteskybar.hu &#8599;</a><a href="https://maps.google.com/?q=High+Note+SkyBar+Budapest" target="_blank" rel="noopener">Vis på kart &#8599;</a></div></div></div>
-			<div class="tl-item"><div class="tl-time">20:00</div><div class="tl-content"><strong>Middag: VIBE Budapest</strong><p>Moderne fine dining / tasting menu. Ca. 6 min gange fra hotellet.</p><p class="cost">~46 000 HUF / ~1 550 NOK per pers. (inkl. service)</p><div class="tl-links"><a href="https://vibebudapest.com/en" target="_blank" rel="noopener">vibebudapest.com &#8599;</a><a href="https://maps.google.com/?q=VIBE+Budapest+restaurant" target="_blank" rel="noopener">Vis på kart &#8599;</a></div></div></div>
+			<div class="tl-item" class:done={doneItems['d1-arrival']}><button class="tl-dot" onclick={() => toggleDone('d1-arrival')}></button><div class="tl-time">12:05</div><div class="tl-content"><strong>Ankomst Budapest</strong><p>Landet! Hent bagasje og finn 100E buss.</p></div></div>
+			<div class="tl-item" class:done={doneItems['d1-bus']}><button class="tl-dot" onclick={() => toggleDone('d1-bus')}></button><div class="tl-time">12:30</div><div class="tl-content"><strong>100E buss til sentrum</strong><p>Kjøp billett i automat. Ca. 35–40 min til Deák Ferenc tér.</p></div></div>
+			<div class="tl-item" class:done={doneItems['d1-walk']}><button class="tl-dot" onclick={() => toggleDone('d1-walk')}></button><div class="tl-time">13:15</div><div class="tl-content"><strong>Gange til D8 Hotel</strong><p>Ca. 5 min fra Deák Ferenc tér. Lever bagasje / tidlig innsjekk.</p></div></div>
+			<div class="tl-item" class:done={doneItems['d1-checkin']}><button class="tl-dot" onclick={() => toggleDone('d1-checkin')}></button><div class="tl-time">14:00</div><div class="tl-content"><strong>Innsjekk D8 Hotel</strong><p>Frisk opp, bytt klær, klar for byen!</p></div></div>
+			<div class="tl-item" class:done={doneItems['d1-lunch']}><button class="tl-dot" onclick={() => toggleDone('d1-lunch')}></button><div class="tl-time">14:30</div><div class="tl-content"><strong>Lunsj / snack: Café Gerbeaud</strong><p>Historisk kafé ved Vörösmarty tér. Perfekt for en lett lunsj eller kake — dere har en stor middag senere.</p><a href="https://maps.google.com/?q=Café+Gerbeaud+Budapest" target="_blank" rel="noopener">Vis på kart &#8599;</a></div></div>
+			<div class="tl-item" class:done={doneItems['d1-shopping']}><button class="tl-dot" onclick={() => toggleDone('d1-shopping')}></button><div class="tl-time">15:30</div><div class="tl-content"><strong>Shopping & rusletur</strong><ul><li><a href="https://maps.google.com/?q=Váci+utca+Budapest" target="_blank" rel="noopener">Váci utca</a> — hovedhandlegate</li><li><a href="https://maps.google.com/?q=Deák+Ferenc+utca+Budapest" target="_blank" rel="noopener">Deák Ferenc utca</a> — butikker og byliv</li><li><a href="https://maps.google.com/?q=Paloma+Budapest" target="_blank" rel="noopener">Paloma Artspace</a> — design, kunst, lokale produkter</li><li><a href="https://maps.google.com/?q=Párisi+Udvar+Budapest" target="_blank" rel="noopener">Párisi Udvar</a> — historisk shoppingarkade</li></ul></div></div>
+			<div class="tl-item" class:done={doneItems['d1-skybar']}><button class="tl-dot" onclick={() => toggleDone('d1-skybar')}></button><div class="tl-time">18:00</div><div class="tl-content"><strong>Drink: High Note SkyBar</strong><p>Rooftop-bar med panoramautsikt over Budapest. Perfekt start på kvelden!</p><div class="tl-links"><a href="https://highnoteskybar.hu/" target="_blank" rel="noopener">highnoteskybar.hu &#8599;</a><a href="https://maps.google.com/?q=High+Note+SkyBar+Budapest" target="_blank" rel="noopener">Vis på kart &#8599;</a></div></div></div>
+			<div class="tl-item" class:done={doneItems['d1-vibe']}><button class="tl-dot" onclick={() => toggleDone('d1-vibe')}></button><div class="tl-time">20:00</div><div class="tl-content"><strong>Middag: VIBE Budapest</strong><p>Moderne fine dining / tasting menu. Ca. 6 min gange fra hotellet.</p><p class="cost">~46 000 HUF / ~1 550 NOK per pers. (inkl. service)</p><div class="tl-links"><a href="https://vibebudapest.com/en" target="_blank" rel="noopener">vibebudapest.com &#8599;</a><a href="https://maps.google.com/?q=VIBE+Budapest+restaurant" target="_blank" rel="noopener">Vis på kart &#8599;</a></div></div></div>
 		</div>
 	</div>
 
@@ -173,20 +198,20 @@
 			<span class="day-theme">Jødisk kvarter & Ruin Bars</span>
 		</div>
 		<div class="timeline">
-			<div class="tl-item"><div class="tl-time">07:30</div><div class="tl-content"><strong>Frokost på hotellet</strong></div></div>
-			<div class="tl-item"><div class="tl-time">08:15</div><div class="tl-content"><strong>Fisherman's Bastion</strong><p>Best lys og minst folk tidlig. Ta trikk/buss over til Buda-siden.</p><a href="https://maps.google.com/?q=Fisherman's+Bastion+Budapest" target="_blank" rel="noopener">Vis på kart &#8599;</a></div></div>
-			<div class="tl-item"><div class="tl-time">09:30</div><div class="tl-content"><strong>Tilbake til Pest-siden</strong><p>Trikk/buss tilbake over Donau.</p></div></div>
-			<div class="tl-item"><div class="tl-time">10:00</div><div class="tl-content"><strong>Arán Bakery Budapest</strong><p>Kaffe og noe søtt. Perfekt pause før resten av dagen.</p><a href="https://maps.google.com/?q=Arán+Bakery+Budapest" target="_blank" rel="noopener">Vis på kart &#8599;</a></div></div>
-			<div class="tl-item"><div class="tl-time">11:00</div><div class="tl-content"><strong>Neverland Bar & Escape Room</strong><p>Escape room-opplevelse i ruin bar-området. Ca. 60–90 min.</p><p class="cost">~11 000 HUF / ~370 NOK per pers.</p><a href="https://maps.google.com/?q=Neverland+Escape+Room+Budapest" target="_blank" rel="noopener">Vis på kart &#8599;</a></div></div>
-			<div class="tl-item"><div class="tl-time">12:30</div><div class="tl-content"><strong>Lunsj i området</strong><p>Mange muligheter rundt Gozsdu Udvar og det jødiske kvarteret.</p></div></div>
-			<div class="tl-item"><div class="tl-time">13:30</div><div class="tl-content"><strong>Gozsdu Udvar</strong><p>Spaser gjennom passasjen — restauranter, barer og butikker.</p><a href="https://maps.google.com/?q=Gozsdu+Udvar+Budapest" target="_blank" rel="noopener">Vis på kart &#8599;</a></div></div>
-			<div class="tl-item"><div class="tl-time">14:15</div><div class="tl-content"><strong>Den store synagogen</strong><p>Europas største synagoge + Livets tre-minnemonument (utvendig).</p><a href="https://maps.google.com/?q=Dohány+Street+Synagogue+Budapest" target="_blank" rel="noopener">Vis på kart &#8599;</a></div></div>
-			<div class="tl-item"><div class="tl-time">15:00</div><div class="tl-content"><strong>Utforsk kvarteret</strong><p>Rolig tempo — street art, kafeer, butikker i det jødiske kvarteret.</p></div></div>
-			<div class="tl-item"><div class="tl-time">16:30</div><div class="tl-content"><strong>Szimpla Kert</strong><p>Budapests mest kjente ruin bar. Verd et besøk mens det fortsatt er dagslys!</p><a href="https://maps.google.com/?q=Szimpla+Kert+Budapest" target="_blank" rel="noopener">Vis på kart &#8599;</a></div></div>
-			<div class="tl-item"><div class="tl-time">18:00</div><div class="tl-content"><strong>Tilbake til hotellet</strong><p>Hvil og frisk opp før middagen.</p></div></div>
-			<div class="tl-item"><div class="tl-time">20:00</div><div class="tl-content"><strong>Middag: Mazel Tov</strong><p>Moderne middelhavs-mat i vakre omgivelser. Booking anbefales!</p><p class="cost">~40–50 EUR / ~450–560 NOK per pers.</p><a href="https://maps.google.com/?q=Mazel+Tov+Budapest" target="_blank" rel="noopener">Vis på kart &#8599;</a></div></div>
-			<div class="tl-item"><div class="tl-time">22:00</div><div class="tl-content"><strong>360 Bar</strong><p>Rooftop-drink med utsikt over byen.</p><a href="https://maps.google.com/?q=360+Bar+Budapest" target="_blank" rel="noopener">Vis på kart &#8599;</a></div></div>
-			<div class="tl-item"><div class="tl-time">23:30</div><div class="tl-content"><strong>Spasertur tilbake</strong><p>Via Operaen og St. Stephen's Basilica (opplyst). Ca. 15–20 min.</p></div></div>
+			<div class="tl-item" class:done={doneItems['d2-breakfast']}><button class="tl-dot" onclick={() => toggleDone('d2-breakfast')}></button><div class="tl-time">07:30</div><div class="tl-content"><strong>Frokost på hotellet</strong></div></div>
+			<div class="tl-item" class:done={doneItems['d2-fisherman']}><button class="tl-dot" onclick={() => toggleDone('d2-fisherman')}></button><div class="tl-time">08:15</div><div class="tl-content"><strong>Fisherman's Bastion</strong><p>Best lys og minst folk tidlig. Ta trikk/buss over til Buda-siden.</p><a href="https://maps.google.com/?q=Fisherman's+Bastion+Budapest" target="_blank" rel="noopener">Vis på kart &#8599;</a></div></div>
+			<div class="tl-item" class:done={doneItems['d2-back']}><button class="tl-dot" onclick={() => toggleDone('d2-back')}></button><div class="tl-time">09:30</div><div class="tl-content"><strong>Tilbake til Pest-siden</strong><p>Trikk/buss tilbake over Donau.</p></div></div>
+			<div class="tl-item" class:done={doneItems['d2-bakery']}><button class="tl-dot" onclick={() => toggleDone('d2-bakery')}></button><div class="tl-time">10:00</div><div class="tl-content"><strong>Arán Bakery Budapest</strong><p>Kaffe og noe søtt. Perfekt pause før resten av dagen.</p><a href="https://maps.google.com/?q=Arán+Bakery+Budapest" target="_blank" rel="noopener">Vis på kart &#8599;</a></div></div>
+			<div class="tl-item" class:done={doneItems['d2-escape']}><button class="tl-dot" onclick={() => toggleDone('d2-escape')}></button><div class="tl-time">11:00</div><div class="tl-content"><strong>Neverland Bar & Escape Room</strong><p>Escape room-opplevelse i ruin bar-området. Ca. 60–90 min.</p><p class="cost">~11 000 HUF / ~370 NOK per pers.</p><a href="https://maps.google.com/?q=Neverland+Escape+Room+Budapest" target="_blank" rel="noopener">Vis på kart &#8599;</a></div></div>
+			<div class="tl-item" class:done={doneItems['d2-lunch']}><button class="tl-dot" onclick={() => toggleDone('d2-lunch')}></button><div class="tl-time">12:30</div><div class="tl-content"><strong>Lunsj i området</strong><p>Mange muligheter rundt Gozsdu Udvar og det jødiske kvarteret.</p></div></div>
+			<div class="tl-item" class:done={doneItems['d2-gozsdu']}><button class="tl-dot" onclick={() => toggleDone('d2-gozsdu')}></button><div class="tl-time">13:30</div><div class="tl-content"><strong>Gozsdu Udvar</strong><p>Spaser gjennom passasjen — restauranter, barer og butikker.</p><a href="https://maps.google.com/?q=Gozsdu+Udvar+Budapest" target="_blank" rel="noopener">Vis på kart &#8599;</a></div></div>
+			<div class="tl-item" class:done={doneItems['d2-synagogue']}><button class="tl-dot" onclick={() => toggleDone('d2-synagogue')}></button><div class="tl-time">14:15</div><div class="tl-content"><strong>Den store synagogen</strong><p>Europas største synagoge + Livets tre-minnemonument (utvendig).</p><a href="https://maps.google.com/?q=Dohány+Street+Synagogue+Budapest" target="_blank" rel="noopener">Vis på kart &#8599;</a></div></div>
+			<div class="tl-item" class:done={doneItems['d2-explore']}><button class="tl-dot" onclick={() => toggleDone('d2-explore')}></button><div class="tl-time">15:00</div><div class="tl-content"><strong>Utforsk kvarteret</strong><p>Rolig tempo — street art, kafeer, butikker i det jødiske kvarteret.</p></div></div>
+			<div class="tl-item" class:done={doneItems['d2-szimpla']}><button class="tl-dot" onclick={() => toggleDone('d2-szimpla')}></button><div class="tl-time">16:30</div><div class="tl-content"><strong>Szimpla Kert</strong><p>Budapests mest kjente ruin bar. Verd et besøk mens det fortsatt er dagslys!</p><a href="https://maps.google.com/?q=Szimpla+Kert+Budapest" target="_blank" rel="noopener">Vis på kart &#8599;</a></div></div>
+			<div class="tl-item" class:done={doneItems['d2-rest']}><button class="tl-dot" onclick={() => toggleDone('d2-rest')}></button><div class="tl-time">18:00</div><div class="tl-content"><strong>Tilbake til hotellet</strong><p>Hvil og frisk opp før middagen.</p></div></div>
+			<div class="tl-item" class:done={doneItems['d2-mazel']}><button class="tl-dot" onclick={() => toggleDone('d2-mazel')}></button><div class="tl-time">20:00</div><div class="tl-content"><strong>Middag: Mazel Tov</strong><p>Moderne middelhavs-mat i vakre omgivelser. Booking anbefales!</p><p class="cost">~40–50 EUR / ~450–560 NOK per pers.</p><a href="https://maps.google.com/?q=Mazel+Tov+Budapest" target="_blank" rel="noopener">Vis på kart &#8599;</a></div></div>
+			<div class="tl-item" class:done={doneItems['d2-360']}><button class="tl-dot" onclick={() => toggleDone('d2-360')}></button><div class="tl-time">22:00</div><div class="tl-content"><strong>360 Bar</strong><p>Rooftop-drink med utsikt over byen.</p><a href="https://maps.google.com/?q=360+Bar+Budapest" target="_blank" rel="noopener">Vis på kart &#8599;</a></div></div>
+			<div class="tl-item" class:done={doneItems['d2-walk']}><button class="tl-dot" onclick={() => toggleDone('d2-walk')}></button><div class="tl-time">23:30</div><div class="tl-content"><strong>Spasertur tilbake</strong><p>Via Operaen og St. Stephen's Basilica (opplyst). Ca. 15–20 min.</p></div></div>
 		</div>
 	</div>
 
@@ -198,13 +223,13 @@
 			<span class="day-theme">Spa & Avslapping</span>
 		</div>
 		<div class="timeline">
-			<div class="tl-item"><div class="tl-time">08:00</div><div class="tl-content"><strong>Frokost på hotellet</strong></div></div>
-			<div class="tl-item"><div class="tl-time">09:00</div><div class="tl-content"><strong>Széchenyi Termalbad</strong><p>Europas største termalbad. Kom tidlig for å unngå køer! Ta metro M1 (gul linje) til Széchenyi fürdő.</p><div class="tl-links"><a href="https://www.szechenyibath.hu/" target="_blank" rel="noopener">szechenyibath.hu &#8599;</a><a href="https://maps.google.com/?q=Széchenyi+thermal+bath+Budapest" target="_blank" rel="noopener">Vis på kart &#8599;</a></div></div></div>
-			<div class="tl-item"><div class="tl-time">12:30</div><div class="tl-content"><strong>Lunsj ved Városliget</strong><p>Spis i nærheten av Helteplassen / Byparken før dere drar tilbake.</p></div></div>
-			<div class="tl-item"><div class="tl-time">14:00</div><div class="tl-content"><strong>Rolig tempo</strong><p>Tilbake til sentrum. Spasertur langs Donau, kafé, shopping — nyt byen i rolig tempo.</p></div></div>
-			<div class="tl-item"><div class="tl-time">16:00</div><div class="tl-content"><strong>Hvil på hotellet</strong><p>Slapp av etter spa-dagen. Frisk opp før middag.</p></div></div>
-			<div class="tl-item"><div class="tl-time">20:00</div><div class="tl-content"><strong>Middag: Beerstro14 Steak House</strong><p>Steakhouse, ca. 13 min gange fra hotellet. Avslappet avslutning etter spa-dag.</p><p class="cost">~25 000 HUF / ~850 NOK per pers.</p><a href="https://maps.google.com/?q=Beerstro14+Budapest" target="_blank" rel="noopener">Vis på kart &#8599;</a></div></div>
-			<div class="tl-item"><div class="tl-time">22:00</div><div class="tl-content"><strong>Siste kveld</strong><p>Rolig spasertur tilbake langs Donau. Tidlig kveld — flydag i morgen!</p></div></div>
+			<div class="tl-item" class:done={doneItems['d3-breakfast']}><button class="tl-dot" onclick={() => toggleDone('d3-breakfast')}></button><div class="tl-time">08:00</div><div class="tl-content"><strong>Frokost på hotellet</strong></div></div>
+			<div class="tl-item" class:done={doneItems['d3-spa']}><button class="tl-dot" onclick={() => toggleDone('d3-spa')}></button><div class="tl-time">09:00</div><div class="tl-content"><strong>Széchenyi Termalbad</strong><p>Europas største termalbad. Kom tidlig for å unngå køer! Ta metro M1 (gul linje) til Széchenyi fürdő.</p><div class="spa-options"><div class="spa-option"><strong>Private Spa Experience</strong> (Superior Room)<p>Inkl. 45 min par-aromamassasje</p><p class="cost">47 000 HUF / ~1 600 NOK per pers.</p></div><div class="spa-option"><strong>Private Spa Retreat</strong> (Superior Room)<p>Uten behandling</p><p class="cost">35 000 HUF / ~1 190 NOK per pers.</p></div></div><div class="tl-links"><a href="https://www.szechenyibath.hu/" target="_blank" rel="noopener">szechenyibath.hu &#8599;</a><a href="https://maps.google.com/?q=Széchenyi+thermal+bath+Budapest" target="_blank" rel="noopener">Vis på kart &#8599;</a></div></div></div>
+			<div class="tl-item" class:done={doneItems['d3-lunch']}><button class="tl-dot" onclick={() => toggleDone('d3-lunch')}></button><div class="tl-time">12:30</div><div class="tl-content"><strong>Lunsj ved Városliget</strong><p>Spis i nærheten av Helteplassen / Byparken før dere drar tilbake.</p></div></div>
+			<div class="tl-item" class:done={doneItems['d3-relax']}><button class="tl-dot" onclick={() => toggleDone('d3-relax')}></button><div class="tl-time">14:00</div><div class="tl-content"><strong>Rolig tempo</strong><p>Tilbake til sentrum. Spasertur langs Donau, kafé, shopping — nyt byen i rolig tempo.</p></div></div>
+			<div class="tl-item" class:done={doneItems['d3-rest']}><button class="tl-dot" onclick={() => toggleDone('d3-rest')}></button><div class="tl-time">16:00</div><div class="tl-content"><strong>Hvil på hotellet</strong><p>Slapp av etter spa-dagen. Frisk opp før middag.</p></div></div>
+			<div class="tl-item" class:done={doneItems['d3-beerstro']}><button class="tl-dot" onclick={() => toggleDone('d3-beerstro')}></button><div class="tl-time">20:00</div><div class="tl-content"><strong>Middag: Beerstro14 Steak House</strong><p>Steakhouse, ca. 13 min gange fra hotellet. Avslappet avslutning etter spa-dag.</p><p class="cost">~25 000 HUF / ~850 NOK per pers.</p><a href="https://maps.google.com/?q=Beerstro14+Budapest" target="_blank" rel="noopener">Vis på kart &#8599;</a></div></div>
+			<div class="tl-item" class:done={doneItems['d3-evening']}><button class="tl-dot" onclick={() => toggleDone('d3-evening')}></button><div class="tl-time">22:00</div><div class="tl-content"><strong>Siste kveld</strong><p>Rolig spasertur tilbake langs Donau. Tidlig kveld — flydag i morgen!</p></div></div>
 		</div>
 	</div>
 
@@ -216,12 +241,12 @@
 			<span class="day-theme">Hjemreise</span>
 		</div>
 		<div class="timeline">
-			<div class="tl-item"><div class="tl-time">08:00</div><div class="tl-content"><strong>Frokost på hotellet</strong><p>Siste frokost — nyt den!</p></div></div>
-			<div class="tl-item"><div class="tl-time">09:00</div><div class="tl-content"><strong>Siste rusletur / kaffe</strong><p>Kort tur i nabolaget. Siste sjanse for suvenirer!</p></div></div>
-			<div class="tl-item"><div class="tl-time">10:30</div><div class="tl-content"><strong>Pakk og gjør klar</strong><p>Dobbeltsjekk rommet.</p></div></div>
-			<div class="tl-item"><div class="tl-time">11:00</div><div class="tl-content"><strong>Utsjekk D8 Hotel</strong></div></div>
-			<div class="tl-item"><div class="tl-time">11:10</div><div class="tl-content"><strong>100E buss til flyplassen</strong><p>Gå til Deák Ferenc tér (5 min). Buss ca. 35–40 min. Vær på flyplassen ~11:50.</p></div></div>
-			<div class="tl-item"><div class="tl-time">13:00</div><div class="tl-content"><strong>Fly DY1551 &rarr; Oslo</strong><p>Ankomst Gardermoen 15:25. Velkomne hjem!</p></div></div>
+			<div class="tl-item" class:done={doneItems['d4-breakfast']}><button class="tl-dot" onclick={() => toggleDone('d4-breakfast')}></button><div class="tl-time">08:00</div><div class="tl-content"><strong>Frokost på hotellet</strong><p>Siste frokost — nyt den!</p></div></div>
+			<div class="tl-item" class:done={doneItems['d4-walk']}><button class="tl-dot" onclick={() => toggleDone('d4-walk')}></button><div class="tl-time">09:00</div><div class="tl-content"><strong>Siste rusletur / kaffe</strong><p>Kort tur i nabolaget. Siste sjanse for suvenirer!</p></div></div>
+			<div class="tl-item" class:done={doneItems['d4-pack']}><button class="tl-dot" onclick={() => toggleDone('d4-pack')}></button><div class="tl-time">10:30</div><div class="tl-content"><strong>Pakk og gjør klar</strong><p>Dobbeltsjekk rommet.</p></div></div>
+			<div class="tl-item" class:done={doneItems['d4-checkout']}><button class="tl-dot" onclick={() => toggleDone('d4-checkout')}></button><div class="tl-time">11:00</div><div class="tl-content"><strong>Utsjekk D8 Hotel</strong></div></div>
+			<div class="tl-item" class:done={doneItems['d4-bus']}><button class="tl-dot" onclick={() => toggleDone('d4-bus')}></button><div class="tl-time">11:10</div><div class="tl-content"><strong>100E buss til flyplassen</strong><p>Gå til Deák Ferenc tér (5 min). Buss ca. 35–40 min. Vær på flyplassen ~11:50.</p></div></div>
+			<div class="tl-item" class:done={doneItems['d4-fly']}><button class="tl-dot" onclick={() => toggleDone('d4-fly')}></button><div class="tl-time">13:00</div><div class="tl-content"><strong>Fly DY1551 &rarr; Oslo</strong><p>Ankomst Gardermoen 15:25. Velkomne hjem!</p></div></div>
 		</div>
 	</div>
 
@@ -232,7 +257,7 @@
 			<div class="card restaurant">
 				<div class="card-top-row">
 					<div class="card-label">Dag 1 &middot; Fredag kveld</div>
-					<span class="booking-badge must-book">Må bookes</span>
+					<BookingBadge id="vibe" defaultText="Må bookes" defaultColor="error" />
 				</div>
 				<div class="card-title">VIBE Budapest</div>
 				<p>Moderne fine dining / tasting menu</p>
@@ -250,7 +275,7 @@
 			<div class="card restaurant">
 				<div class="card-top-row">
 					<div class="card-label">Dag 2 &middot; Lørdag kveld</div>
-					<span class="booking-badge should-book">Anbefalt booking</span>
+					<BookingBadge id="mazel-tov" defaultText="Anbefalt booking" defaultColor="warning" />
 				</div>
 				<div class="card-title">Mazel Tov</div>
 				<p>Moderne middelhavs-mat i ruin bar-stil innergård</p>
@@ -266,7 +291,7 @@
 			<div class="card restaurant">
 				<div class="card-top-row">
 					<div class="card-label">Dag 3 &middot; Søndag kveld</div>
-					<span class="booking-badge walk-in">Walk-in</span>
+					<BookingBadge id="beerstro14" defaultText="Walk-in" defaultColor="success" />
 				</div>
 				<div class="card-title">Beerstro14 Steak House</div>
 				<p>Steakhouse — avslappet avslutning etter spa-dag</p>
@@ -310,12 +335,12 @@
 				<tr><td>Mazel Tov (dag 2)</td><td>~500</td></tr>
 				<tr><td>Beerstro14 (dag 3)</td><td>850</td></tr>
 				<tr><td>Escape Room</td><td>370</td></tr>
-				<tr><td>Széchenyi Termalbad</td><td>~250</td></tr>
+				<tr><td>Széchenyi — Private Spa Retreat</td><td>1 190</td></tr><tr><td class="table-alt">↳ alt: Private Spa Experience (m/ massasje)</td><td class="table-alt">1 600</td></tr>
 				<tr><td>100E buss (tur/retur)</td><td>170</td></tr>
 				<tr><td>72-timers Travelcard</td><td>195</td></tr>
 				<tr><td>Diverse (kaffe, drikke, snacks)</td><td>~500</td></tr>
 			</tbody>
-			<tfoot><tr><td><strong>Totalt estimat</strong></td><td><strong>~4 385</strong></td></tr></tfoot>
+			<tfoot><tr><td><strong>Totalt estimat</strong></td><td><strong>~5 325</strong></td></tr></tfoot>
 		</table>
 		<p class="card-note">Ekskl. fly og hotell. Valutakurs: ~0,034 NOK/HUF.</p>
 	</div>
@@ -332,7 +357,7 @@
 
 	<div id="sjekkliste" class="subsection">
 		<h3>Sjekkliste</h3>
-		<Checklist />
+		<Checklist bind:this={checklistRef} />
 	</div>
 
 	<div id="praktisk" class="subsection">
@@ -345,6 +370,12 @@
 		<Phrasebook />
 	</div>
 </section>
+
+{#if checklistHidden}
+	<div class="restore-bar">
+		<button class="restore-btn" onclick={restoreChecklist}>Vis sjekkliste igjen</button>
+	</div>
+{/if}
 
 <style>
 	/* Hero */
@@ -551,22 +582,27 @@
 		gap: 0.5rem;
 	}
 
-	.booking-badge {
-		font-size: 0.65rem;
-		font-weight: 600;
-		text-transform: uppercase;
-		letter-spacing: 0.03em;
-		padding: 0.2rem 0.5rem;
-		border-radius: 4px;
-		white-space: nowrap;
+	.restore-bar {
+		text-align: center;
+		padding: 1rem 0;
 	}
 
-	.booking-badge.must-book { background: #fce4ec; color: #c62828; }
-	:global([data-theme="dark"]) .booking-badge.must-book { background: #3e1416; color: #ef9a9a; }
-	.booking-badge.should-book { background: #fff3e0; color: #e65100; }
-	:global([data-theme="dark"]) .booking-badge.should-book { background: #3e2612; color: #ffb74d; }
-	.booking-badge.walk-in { background: #e8f5e9; color: #2e7d32; }
-	:global([data-theme="dark"]) .booking-badge.walk-in { background: #1b3d1f; color: #81c784; }
+	.restore-btn {
+		background: none;
+		border: 1px dashed var(--border);
+		border-radius: 8px;
+		padding: 0.4rem 0.85rem;
+		font-size: 0.75rem;
+		font-family: inherit;
+		color: var(--text-muted);
+		cursor: pointer;
+		transition: all 0.15s;
+	}
+
+	.restore-btn:hover {
+		color: var(--accent);
+		border-color: var(--accent);
+	}
 
 	.map-link {
 		display: inline-block;
@@ -648,8 +684,28 @@
 	.timeline { position: relative; padding-left: 1rem; }
 	.timeline::before { content: ''; position: absolute; left: 0; top: 0.5rem; bottom: 0.5rem; width: 2px; background: var(--border); }
 
-	.tl-item { display: flex; gap: 0.75rem; padding: 0.5rem 0; position: relative; }
-	.tl-item::before { content: ''; position: absolute; left: -1rem; top: 0.85rem; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); margin-left: -3px; }
+	.tl-item { display: flex; gap: 0.75rem; padding: 0.5rem 0; position: relative; transition: opacity 0.2s; }
+	.tl-item.done { opacity: 0.45; }
+	.tl-item.done .tl-content strong { text-decoration: line-through; }
+
+	.tl-dot {
+		position: absolute;
+		left: -1rem;
+		top: 0.65rem;
+		width: 14px;
+		height: 14px;
+		border-radius: 50%;
+		background: var(--accent);
+		border: 2px solid var(--bg-card);
+		margin-left: -6px;
+		cursor: pointer;
+		z-index: 2;
+		padding: 0;
+		transition: all 0.15s;
+	}
+	.tl-dot:hover { transform: scale(1.3); }
+	.tl-item.done .tl-dot { background: #4caf50; }
+	:global([data-theme="dark"]) .tl-item.done .tl-dot { background: #66bb6a; }
 
 	.tl-time { font-size: 0.75rem; font-weight: 600; color: var(--text-muted); min-width: 70px; padding-top: 0.1rem; }
 	.tl-content { flex: 1; }
@@ -659,6 +715,13 @@
 	.tl-content li { margin-bottom: 0.2rem; }
 	.tl-content a { font-size: 0.8rem; font-weight: 500; }
 	.tl-links { display: flex; gap: 1rem; margin-top: 0.25rem; }
+
+	.spa-options { margin: 0.5rem 0; display: flex; flex-direction: column; gap: 0.35rem; }
+	.spa-option { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 0.5rem 0.75rem; font-size: 0.8rem; }
+	.spa-option strong { font-size: 0.8rem; }
+	.spa-option p { margin-top: 0.1rem; }
+
+	.table-alt { font-size: 0.8rem; color: var(--text-muted); font-style: italic; }
 
 	/* Attraction cards */
 	.attraction { text-align: center; }
