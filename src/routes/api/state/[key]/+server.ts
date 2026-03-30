@@ -38,7 +38,9 @@ export const GET: RequestHandler = async ({ params }) => {
 	try {
 		const rows = await db`select value from kv_store where key = ${key}`;
 		const value = rows[0]?.value ?? {};
-		return new Response(JSON.stringify(value), {
+		// value may already be a string from postgres.js — avoid double-encoding
+		const body = typeof value === 'string' ? value : JSON.stringify(value);
+		return new Response(body, {
 			headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' },
 		});
 	} catch (err) {
