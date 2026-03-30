@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { loadState, saveState } from './sync';
+	import { loadState, saveState, onFocusRefresh } from './sync';
 
 	type CheckItem = { id: string; text: string; checked: boolean };
 	type CheckGroup = { title: string; key: string; items: CheckItem[] };
@@ -69,7 +69,7 @@
 	let newItemTexts = $state<Record<string, string>>({});
 	let toast = $state('');
 
-	onMount(async () => {
+	async function applyServerState() {
 		const data = await loadState<ChecklistData>('checklist');
 		if (data) {
 			// Apply custom items
@@ -94,9 +94,13 @@
 				}
 			}
 			// Apply hidden
-			if (data.hidden) hidden = true;
+			hidden = data.hidden ?? false;
 		}
-		loaded = true;
+	}
+
+	onMount(() => {
+		applyServerState().then(() => { loaded = true; });
+		return onFocusRefresh(applyServerState);
 	});
 
 	function getStateSnapshot(): ChecklistData {

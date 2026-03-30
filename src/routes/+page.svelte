@@ -8,7 +8,7 @@
 	import PracticalInfo from '$lib/PracticalInfo.svelte';
 	import Weather from '$lib/Weather.svelte';
 	import BookingBadge from '$lib/BookingBadge.svelte';
-	import { loadState, saveState } from '$lib/sync';
+	import { loadState, saveState, onFocusRefresh } from '$lib/sync';
 
 	type ItineraryData = { done: Record<string, boolean> };
 
@@ -16,12 +16,17 @@
 	let checklistRef: Checklist;
 	let checklistHidden = $state(false);
 
-	onMount(async () => {
+	async function refreshState() {
 		const data = await loadState<ItineraryData>('itinerary');
 		if (data?.done) doneItems = data.done;
 
 		const cl = await loadState<{ hidden: boolean }>('checklist');
-		if (cl?.hidden) checklistHidden = true;
+		checklistHidden = cl?.hidden ?? false;
+	}
+
+	onMount(() => {
+		refreshState();
+		return onFocusRefresh(refreshState);
 	});
 
 	async function toggleDone(id: string) {

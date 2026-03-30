@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { loadState, saveState } from './sync';
+	import { loadState, saveState, onFocusRefresh } from './sync';
 
 	let { id, defaultText, defaultColor }: { id: string; defaultText: string; defaultColor: 'success' | 'warning' | 'error' } = $props();
 
@@ -17,12 +17,17 @@
 	let showEditor = $state(false);
 	let editText = $state('');
 
-	onMount(async () => {
+	async function applyServerState() {
 		const data = await loadState<RestaurantData>('restaurants');
 		if (data?.status?.[id]) {
 			text = data.status[id].text;
 			color = data.status[id].color as typeof color;
 		}
+	}
+
+	onMount(() => {
+		applyServerState();
+		return onFocusRefresh(applyServerState);
 	});
 
 	async function save() {
