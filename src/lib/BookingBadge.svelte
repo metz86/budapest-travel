@@ -1,9 +1,10 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { loadState, saveState } from './sync';
 
 	let { id, defaultText, defaultColor }: { id: string; defaultText: string; defaultColor: 'success' | 'warning' | 'error' } = $props();
 
-	const STORAGE_KEY = 'budapest-restaurant-status';
+	type RestaurantData = { status: Record<string, { text: string; color: string }> };
 
 	const colorOptions = [
 		{ value: 'success' as const, label: 'Grønn' },
@@ -16,25 +17,19 @@
 	let showEditor = $state(false);
 	let editText = $state('');
 
-	onMount(() => {
-		const saved = localStorage.getItem(STORAGE_KEY);
-		if (saved) {
-			try {
-				const parsed = JSON.parse(saved) as Record<string, { text: string; color: string }>;
-				if (parsed[id]) {
-					text = parsed[id].text;
-					color = parsed[id].color as typeof color;
-				}
-			} catch {}
+	onMount(async () => {
+		const data = await loadState<RestaurantData>('restaurants');
+		if (data?.status?.[id]) {
+			text = data.status[id].text;
+			color = data.status[id].color as typeof color;
 		}
 	});
 
-	function save() {
-		let all: Record<string, { text: string; color: string }> = {};
-		const saved = localStorage.getItem(STORAGE_KEY);
-		if (saved) { try { all = JSON.parse(saved); } catch {} }
-		all[id] = { text, color };
-		localStorage.setItem(STORAGE_KEY, JSON.stringify(all));
+	async function save() {
+		// Load current state, merge, save back
+		const data = await loadState<RestaurantData>('restaurants') ?? { status: {} };
+		data.status[id] = { text, color };
+		await saveState('restaurants', data);
 	}
 
 	function openEditor() {

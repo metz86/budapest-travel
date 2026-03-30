@@ -8,23 +8,25 @@
 	import PracticalInfo from '$lib/PracticalInfo.svelte';
 	import Weather from '$lib/Weather.svelte';
 	import BookingBadge from '$lib/BookingBadge.svelte';
+	import { loadState, saveState } from '$lib/sync';
 
-	// Itinerary done state
-	const DONE_KEY = 'budapest-itinerary-done';
+	type ItineraryData = { done: Record<string, boolean> };
+
 	let doneItems = $state<Record<string, boolean>>({});
-
 	let checklistRef: Checklist;
 	let checklistHidden = $state(false);
 
-	onMount(() => {
-		const saved = localStorage.getItem(DONE_KEY);
-		if (saved) { try { doneItems = JSON.parse(saved); } catch {} }
-		checklistHidden = localStorage.getItem('budapest-checklist-hidden') === 'true';
+	onMount(async () => {
+		const data = await loadState<ItineraryData>('itinerary');
+		if (data?.done) doneItems = data.done;
+
+		const cl = await loadState<{ hidden: boolean }>('checklist');
+		if (cl?.hidden) checklistHidden = true;
 	});
 
-	function toggleDone(id: string) {
+	async function toggleDone(id: string) {
 		doneItems[id] = !doneItems[id];
-		localStorage.setItem(DONE_KEY, JSON.stringify(doneItems));
+		await saveState('itinerary', { done: doneItems });
 	}
 
 	function restoreChecklist() {

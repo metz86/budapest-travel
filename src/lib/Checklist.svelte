@@ -1,12 +1,15 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { loadState, saveState } from './sync';
 
 	type CheckItem = { id: string; text: string; checked: boolean };
 	type CheckGroup = { title: string; key: string; items: CheckItem[] };
 
-	const STORAGE_KEY = 'budapest-checklist';
-	const CUSTOM_KEY = 'budapest-checklist-custom';
-	const HIDDEN_KEY = 'budapest-checklist-hidden';
+	type ChecklistData = {
+		checked: Record<string, boolean>;
+		custom: Record<string, { id: string; text: string }[]>;
+		hidden: boolean;
+	};
 
 	const defaultGroups: CheckGroup[] = [
 		{
@@ -66,27 +69,13 @@
 	let newItemTexts = $state<Record<string, string>>({});
 	let toast = $state('');
 
-	onMount(() => {
-		// Load checked state
-		const saved = localStorage.getItem(STORAGE_KEY);
-		if (saved) {
-			try {
-				const parsed = JSON.parse(saved) as Record<string, boolean>;
+	onMount(async () => {
+		const data = await loadState<ChecklistData>('checklist');
+		if (data) {
+			// Apply custom items
+			if (data.custom) {
 				for (const group of groups) {
-					for (const item of group.items) {
-						if (parsed[item.id] !== undefined) item.checked = parsed[item.id];
-					}
-				}
-			} catch {}
-		}
-
-		// Load custom items
-		const custom = localStorage.getItem(CUSTOM_KEY);
-		if (custom) {
-			try {
-				const parsed = JSON.parse(custom) as Record<string, { id: string; text: string }[]>;
-				for (const group of groups) {
-					const extras = parsed[group.key];
+					const extras = data.custom[group.key];
 					if (extras) {
 						for (const e of extras) {
 							if (!group.items.some(i => i.id === e.id)) {
@@ -95,35 +84,28 @@
 						}
 					}
 				}
-				// Re-apply checked state for custom items
-				if (saved) {
-					const parsed2 = JSON.parse(saved) as Record<string, boolean>;
-					for (const group of groups) {
-						for (const item of group.items) {
-							if (parsed2[item.id] !== undefined) item.checked = parsed2[item.id];
-						}
+			}
+			// Apply checked state
+			if (data.checked) {
+				for (const group of groups) {
+					for (const item of group.items) {
+						if (data.checked[item.id] !== undefined) item.checked = data.checked[item.id];
 					}
 				}
-			} catch {}
+			}
+			// Apply hidden
+			if (data.hidden) hidden = true;
 		}
-
-		// Load hidden state
-		hidden = localStorage.getItem(HIDDEN_KEY) === 'true';
-
 		loaded = true;
 	});
 
-	function saveChecked() {
-		const state: Record<string, boolean> = {};
+	function getStateSnapshot(): ChecklistData {
+		const checked: Record<string, boolean> = {};
 		for (const group of groups) {
 			for (const item of group.items) {
-				state[item.id] = item.checked;
+				checked[item.id] = item.checked;
 			}
 		}
-		localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-	}
-
-	function saveCustom() {
 		const custom: Record<string, { id: string; text: string }[]> = {};
 		const defaultIds = new Set(defaultGroups.flatMap(g => g.items.map(i => i.id)));
 		for (const group of groups) {
@@ -132,12 +114,17 @@
 				custom[group.key] = extras.map(i => ({ id: i.id, text: i.text }));
 			}
 		}
-		localStorage.setItem(CUSTOM_KEY, JSON.stringify(custom));
+		return { checked, custom, hidden };
+	}
+
+	async function save() {
+		const ok = await saveState('checklist', getStateSnapshot());
+		if (!ok) showToast('Kunne ikke lagre — prøv igjen');
 	}
 
 	function toggle(item: CheckItem) {
 		item.checked = !item.checked;
-		saveChecked();
+		save();
 	}
 
 	function addItem(group: CheckGroup) {
@@ -146,14 +133,13 @@
 		const id = `custom-${group.key}-${Date.now()}`;
 		group.items.push({ id, text, checked: false });
 		newItemTexts[group.key] = '';
-		saveCustom();
+		save();
 	}
 
 	function removeItem(group: CheckGroup, item: CheckItem) {
 		const idx = group.items.indexOf(item);
 		if (idx >= 0) group.items.splice(idx, 1);
-		saveCustom();
-		saveChecked();
+		save();
 	}
 
 	function checkedCount(items: CheckItem[]): number {
@@ -162,13 +148,13 @@
 
 	function hideChecklist() {
 		hidden = true;
-		localStorage.setItem(HIDDEN_KEY, 'true');
 		onhide();
+		save();
 	}
 
 	export function restore() {
 		hidden = false;
-		localStorage.removeItem(HIDDEN_KEY);
+		save();
 	}
 
 	function showToast(msg: string) {
