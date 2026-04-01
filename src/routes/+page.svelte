@@ -193,7 +193,7 @@
 			<div class="tl-item" class:done={doneItems['d1-lunch']}><button class="tl-dot" onclick={() => toggleDone('d1-lunch')}></button><div class="tl-time">14:30</div><div class="tl-content"><strong>Lunsj / snack: Café Gerbeaud</strong><p>Historisk kafé ved Vörösmarty tér. Perfekt for en lett lunsj eller kake — dere har en stor middag senere.</p><a href="https://maps.google.com/?q=Café+Gerbeaud+Budapest" target="_blank" rel="noopener">Vis på kart &#8599;</a></div></div>
 			<div class="tl-item" class:done={doneItems['d1-shopping']}><button class="tl-dot" onclick={() => toggleDone('d1-shopping')}></button><div class="tl-time">15:30</div><div class="tl-content"><strong>Shopping & rusletur</strong><ul><li><a href="https://maps.google.com/?q=Váci+utca+Budapest" target="_blank" rel="noopener">Váci utca</a> — hovedhandlegate</li><li><a href="https://maps.google.com/?q=Deák+Ferenc+utca+Budapest" target="_blank" rel="noopener">Deák Ferenc utca</a> — butikker og byliv</li><li><a href="https://maps.google.com/?q=Paloma+Budapest" target="_blank" rel="noopener">Paloma Artspace</a> — design, kunst, lokale produkter</li><li><a href="https://maps.google.com/?q=Párisi+Udvar+Budapest" target="_blank" rel="noopener">Párisi Udvar</a> — historisk shoppingarkade</li></ul></div></div>
 			<div class="tl-item" class:done={doneItems['d1-skybar']}><button class="tl-dot" onclick={() => toggleDone('d1-skybar')}></button><div class="tl-time">18:00</div><div class="tl-content"><strong>Drink: High Note SkyBar</strong><p>Rooftop-bar med panoramautsikt over Budapest. Perfekt start på kvelden!</p><div class="tl-links"><a href="https://highnoteskybar.hu/" target="_blank" rel="noopener">highnoteskybar.hu &#8599;</a><a href="https://maps.google.com/?q=High+Note+SkyBar+Budapest" target="_blank" rel="noopener">Vis på kart &#8599;</a></div></div></div>
-			<div class="tl-item" class:done={doneItems['d1-vibe']}><button class="tl-dot" onclick={() => toggleDone('d1-vibe')}></button><div class="tl-time">20:00</div><div class="tl-content"><strong>Middag: VIBE Budapest</strong><p>Moderne fine dining / tasting menu. Ca. 6 min gange fra hotellet.</p><p class="cost">~46 000 HUF / ~1 550 NOK per pers. (inkl. service)</p><div class="tl-links"><a href="https://vibebudapest.com/en" target="_blank" rel="noopener">vibebudapest.com &#8599;</a><a href="https://maps.google.com/?q=VIBE+Budapest+restaurant" target="_blank" rel="noopener">Vis på kart &#8599;</a></div></div></div>
+			<div class="tl-item" class:done={doneItems['d1-vibe']}><button class="tl-dot" onclick={() => toggleDone('d1-vibe')}></button><div class="tl-time">19:30</div><div class="tl-content"><strong>Middag: VIBE Budapest</strong><p>Moderne fine dining / tasting menu. Ca. 6 min gange fra hotellet.</p><p><em>Dress code: Smart Casual</em></p><p class="cost">~46 000 HUF / ~1 550 NOK per pers. (inkl. service)</p><div class="tl-links"><a href="https://vibebudapest.com/en" target="_blank" rel="noopener">vibebudapest.com &#8599;</a><a href="https://maps.google.com/?q=VIBE+Budapest+restaurant" target="_blank" rel="noopener">Vis på kart &#8599;</a></div></div></div>
 		</div>
 	</div>
 
@@ -229,8 +229,8 @@
 			<span class="day-theme">Spa & Avslapping</span>
 		</div>
 		<div class="timeline">
-			<div class="tl-item" class:done={doneItems['d3-breakfast']}><button class="tl-dot" onclick={() => toggleDone('d3-breakfast')}></button><div class="tl-time">08:00</div><div class="tl-content"><strong>Frokost på hotellet</strong></div></div>
-			<div class="tl-item" class:done={doneItems['d3-spa']}><button class="tl-dot" onclick={() => toggleDone('d3-spa')}></button><div class="tl-time">09:00</div><div class="tl-content"><strong>Széchenyi Termalbad</strong><p>Europas største termalbad. Kom tidlig for å unngå køer! Ta metro M1 (gul linje) til Széchenyi fürdő.</p><div class="spa-options"><div class="spa-option"><strong>Private Spa Experience</strong> (Superior Room)<p>Inkl. 45 min par-aromamassasje</p><p class="cost">47 000 HUF / ~1 600 NOK per pers.</p></div><div class="spa-option"><strong>Private Spa Retreat</strong> (Superior Room)<p>Uten behandling</p><p class="cost">35 000 HUF / ~1 190 NOK per pers.</p></div></div><div class="tl-links"><a href="https://www.szechenyibath.hu/" target="_blank" rel="noopener">szechenyibath.hu &#8599;</a><a href="https://maps.google.com/?q=Széchenyi+thermal+bath+Budapest" target="_blank" rel="noopener">Vis på kart &#8599;</a></div></div></div>
+			<div class="tl-item" class:done={doneItems['d3-breakfast']}><button class="tl-dot" onclick={() => toggleDone('d3-breakfast')}></button><div class="tl-time">07:00</div><div class="tl-content"><strong>Frokost på hotellet</strong></div></div>
+			<div class="tl-item" class:done={doneItems['d3-spa']}><button class="tl-dot" onclick={() => toggleDone('d3-spa')}></button><div class="tl-time">08:00</div><div class="tl-content"><strong>Széchenyi Termalbad</strong><p>Deluxe privat rom i 4 timer. Inkludert 45 min parbehandling. Ta metro M1 (gul linje) til Széchenyi fürdő.</p><div class="tl-links"><a href="https://www.szechenyibath.hu/" target="_blank" rel="noopener">szechenyibath.hu &#8599;</a><a href="https://maps.google.com/?q=Széchenyi+thermal+bath+Budapest" target="_blank" rel="noopener">Vis på kart &#8599;</a></div></div></div>
 			<div class="tl-item" class:done={doneItems['d3-lunch']}><button class="tl-dot" onclick={() => toggleDone('d3-lunch')}></button><div class="tl-time">12:30</div><div class="tl-content"><strong>Lunsj ved Városliget</strong><p>Spis i nærheten av Helteplassen / Byparken før dere drar tilbake.</p></div></div>
 			<div class="tl-item" class:done={doneItems['d3-relax']}><button class="tl-dot" onclick={() => toggleDone('d3-relax')}></button><div class="tl-time">14:00</div><div class="tl-content"><strong>Rolig tempo</strong><p>Tilbake til sentrum. Spasertur langs Donau, kafé, shopping — nyt byen i rolig tempo.</p></div></div>
 			<div class="tl-item" class:done={doneItems['d3-rest']}><button class="tl-dot" onclick={() => toggleDone('d3-rest')}></button><div class="tl-time">16:00</div><div class="tl-content"><strong>Hvil på hotellet</strong><p>Slapp av etter spa-dagen. Frisk opp før middag.</p></div></div>
@@ -249,10 +249,9 @@
 		</div>
 		<div class="timeline">
 			<div class="tl-item" class:done={doneItems['d4-breakfast']}><button class="tl-dot" onclick={() => toggleDone('d4-breakfast')}></button><div class="tl-time">08:00</div><div class="tl-content"><strong>Frokost på hotellet</strong><p>Siste frokost — nyt den!</p></div></div>
-			<div class="tl-item" class:done={doneItems['d4-walk']}><button class="tl-dot" onclick={() => toggleDone('d4-walk')}></button><div class="tl-time">09:00</div><div class="tl-content"><strong>Siste rusletur / kaffe</strong><p>Kort tur i nabolaget. Siste sjanse for suvenirer!</p></div></div>
-			<div class="tl-item" class:done={doneItems['d4-pack']}><button class="tl-dot" onclick={() => toggleDone('d4-pack')}></button><div class="tl-time">10:30</div><div class="tl-content"><strong>Pakk og gjør klar</strong><p>Dobbeltsjekk rommet.</p></div></div>
-			<div class="tl-item" class:done={doneItems['d4-checkout']}><button class="tl-dot" onclick={() => toggleDone('d4-checkout')}></button><div class="tl-time">11:00</div><div class="tl-content"><strong>Utsjekk D8 Hotel</strong></div></div>
-			<div class="tl-item" class:done={doneItems['d4-bus']}><button class="tl-dot" onclick={() => toggleDone('d4-bus')}></button><div class="tl-time">11:10</div><div class="tl-content"><strong>100E buss til flyplassen</strong><p>Gå til Deák Ferenc tér (5 min). Buss ca. 35–40 min. Vær på flyplassen ~11:50.</p></div></div>
+			<div class="tl-item" class:done={doneItems['d4-pack']}><button class="tl-dot" onclick={() => toggleDone('d4-pack')}></button><div class="tl-time">09:00</div><div class="tl-content"><strong>Pakk og gjør klar</strong><p>Dobbeltsjekk rommet. Samle alt og gjør dere klare for avreise.</p></div></div>
+			<div class="tl-item" class:done={doneItems['d4-checkout']}><button class="tl-dot" onclick={() => toggleDone('d4-checkout')}></button><div class="tl-time">10:00</div><div class="tl-content"><strong>Utsjekk D8 Hotel</strong></div></div>
+			<div class="tl-item" class:done={doneItems['d4-bus']}><button class="tl-dot" onclick={() => toggleDone('d4-bus')}></button><div class="tl-time">10:10</div><div class="tl-content"><strong>100E buss til flyplassen</strong><p>Gå til Deák Ferenc tér (5 min). Buss ca. 35–40 min. Vær på flyplassen ~11:00.</p></div></div>
 			<div class="tl-item" class:done={doneItems['d4-fly']}><button class="tl-dot" onclick={() => toggleDone('d4-fly')}></button><div class="tl-time">13:00</div><div class="tl-content"><strong>Fly DY1551 &rarr; Oslo</strong><p>Ankomst Gardermoen 15:25. Velkomne hjem!</p></div></div>
 		</div>
 	</div>
@@ -273,6 +272,7 @@
 					<div><strong>Avstand:</strong> 6 min gange</div>
 					<div><strong>Booking:</strong> Obligatorisk</div>
 					<div><strong>Notat:</strong> Minsteforbruk fre/lør</div>
+					<div><strong>Dress code:</strong> Smart Casual</div>
 				</div>
 				<div class="link-row">
 					<a href="https://vibebudapest.com/en" target="_blank" rel="noopener">Nettside &#8599;</a>
@@ -320,7 +320,7 @@
 	<div id="attraksjoner" class="subsection">
 		<h3>Attraksjoner & Opplevelser</h3>
 		<div class="card-grid">
-			<div class="card attraction"><div class="card-emoji">&#9832;</div><div class="card-title">Széchenyi Termalbad</div><p>Søndag formiddag</p><p class="card-note">Europas største termalbad. Kom tidlig!</p><a href="https://www.szechenyibath.hu/" target="_blank" rel="noopener">Kjøp billett &#8599;</a></div>
+			<div class="card attraction"><div class="card-emoji">&#9832;</div><div class="card-title">Széchenyi Termalbad</div><p>Søndag 08:00</p><p class="card-note">Deluxe privat rom (4 timer) med 45 min parbehandling.</p><a href="https://www.szechenyibath.hu/" target="_blank" rel="noopener">Nettside &#8599;</a></div>
 			<div class="card attraction"><div class="card-emoji">&#127984;</div><div class="card-title">Fisherman's Bastion</div><p>Lørdag morgen</p><p class="card-note">Fantastisk utsikt over Donau og Pest-siden.</p></div>
 			<div class="card attraction"><div class="card-emoji">&#11044;</div><div class="card-title">Den store synagogen</div><p>Lørdag formiddag</p><p class="card-note">Europas største + Livets tre-minnemonument.</p></div>
 			<div class="card attraction"><div class="card-emoji">&#127866;</div><div class="card-title">Ruin Bars</div><p>Lørdag ettermiddag/kveld</p><p class="card-note">Szimpla Kert, Gozsdu Udvar, 360 Bar (rooftop).</p></div>
@@ -344,7 +344,7 @@
 				<tr><td>Beerstro14 (dag 2)</td><td>850</td></tr>
 				<tr><td>Mazel Tov (dag 3)</td><td>~500</td></tr>
 				<tr><td>Escape Room</td><td>370</td></tr>
-				<tr><td>Széchenyi — Private Spa Retreat</td><td>1 190</td></tr><tr><td class="table-alt">↳ alt: Private Spa Experience (m/ massasje)</td><td class="table-alt">1 600</td></tr>
+				<tr><td>Széchenyi — Deluxe privat rom (4t) m/ parbehandling</td><td>1 600</td></tr>
 				<tr><td>100E buss (tur/retur)</td><td>170</td></tr>
 				<tr><td>72-timers Travelcard</td><td>195</td></tr>
 				<tr><td>Diverse (kaffe, drikke, snacks)</td><td>~500</td></tr>
