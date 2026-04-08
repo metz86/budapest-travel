@@ -21,6 +21,7 @@
 		{ id: 'budsjett', label: 'Budsjett' },
 		{ id: 'sjekkliste', label: 'Sjekkliste' },
 		{ id: 'praktisk', label: 'Praktisk info' },
+		{ id: 'suvenirer', label: 'Suvenirer' },
 	];
 
 	let menuOpen = $state(false);
@@ -29,7 +30,7 @@
 
 	function toNavId(id: string): string {
 		if (id.startsWith('dag-') || id === 'restauranter' || id === 'attraksjoner') return 'dagsplan';
-		if (id === 'sjekkliste' || id === 'praktisk' || id === 'parlor') return 'forberedelser';
+		if (id === 'sjekkliste' || id === 'praktisk' || id === 'parlor' || id === 'suvenirer') return 'forberedelser';
 		return id;
 	}
 
